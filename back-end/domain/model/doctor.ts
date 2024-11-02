@@ -4,6 +4,7 @@ export class Doctor {
     readonly name: string;
     readonly email: string;
     readonly specialisation: string;
+    
     constructor (doctor: {id?: number; name: string; email: string; specialisation: string;}) {
         this.id = doctor.id;
         this.name = doctor.name;

@@ -31,7 +31,6 @@ export class Patient {
     }
 
     
-
     static from({
         id,
         name,
