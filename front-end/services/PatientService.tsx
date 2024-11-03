@@ -1,15 +1,38 @@
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-const getPatients = async () => {
-    return await fetch(process.env.NEXT_PUBLIC_API_URL + "/patients", {
-        method: "GET", 
-        headers: {
-            "Content-Type": "application/json", 
-        }
-    })
-}
+const getAllPatients = async () => {
+  const response = await fetch(`${apiUrl}/patients`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch patients");
+  }
+
+  return response.json();
+};
+
+const getPatientById = async (id: number) => {
+  const response = await fetch(`${apiUrl}/patients/${id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch patient with ID: ${id}`);
+  }
+
+  return response.json();
+};
 
 const PatientService = {
-    getPatients
-}
+  getAllPatients,
+  getPatientById,
+};
 
 export default PatientService;
