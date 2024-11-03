@@ -35,14 +35,14 @@ const createPatient = async (patientInput: PatientInput): Promise<Patient> => {
         const patient = new Patient(patientInput)
         const patientPrisma = await database.patient.create({
             data: {
-                name: patient.name,
-                sex: patient.sex,
-                dateOfBirth: patient.dateOfBirth,
-                age: patient.age,
-                address: patient.address,
-                email: patient.email,
-                complaints: patient.complaints,
-                nationalRegister: patient.nationalRegister
+                name: patient.getName(),
+                sex: patient.getSex(),
+                dateOfBirth: patient.getDateOfBirth(),
+                age: patient.getAge(),
+                address: patient.getAddress(),
+                email: patient.getEmail(),
+                complaints: patient.getComplaints(),
+                nationalRegister: patient.getNationalRegister()
             },
         })
         return Patient.from(patientPrisma)

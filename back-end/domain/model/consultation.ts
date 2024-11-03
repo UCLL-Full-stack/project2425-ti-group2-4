@@ -20,7 +20,6 @@ export class Consultation {
         this.doctors = consultation.doctors;
     }
 
-    // Getters
     getStartDate(): Date {
         return this.startDate;
     }
@@ -41,7 +40,6 @@ export class Consultation {
         return this.doctors;
     }
 
-    // Setters with validation
     setStartDate(value: Date) {
         if (value > this.endDate) {
             throw new Error("Start date cannot be later than end date.");
@@ -83,7 +81,6 @@ export class Consultation {
         this.doctors = value;
     }
 
-    // Validation method
     validate(consultation: { id?: number; startDate: Date; endDate: Date; name: string; patient: Patient; doctors: Doctor[]; }) {
         if (consultation.name.trim() === "") {
             throw new Error("Consultation name cannot be empty.");
@@ -96,15 +93,20 @@ export class Consultation {
         }
     }
 
-    // Helper function to check if two dates are on the same day
     private isSameDay(date1: Date, date2: Date): boolean {
         return date1.getFullYear() === date2.getFullYear() &&
                date1.getMonth() === date2.getMonth() &&
                date1.getDate() === date2.getDate();
     }
 
-    // Static method to create Consultation from Prisma model
-    static from({ id, startDate, endDate, name, patient, doctors }: ConsultationPrisma) {
+    static from({
+        id,
+        startDate,
+        endDate,
+        name,
+        patient,
+        doctors,
+    }: ConsultationPrisma & { patient: Patient; doctors: Doctor[] }) {
         return new Consultation({
             id,
             startDate,

@@ -14,10 +14,12 @@ const getPatientById = async (id: number): Promise<Patient | null> => {
 }
 
 const createPatient = async (patientInput: PatientInput): Promise<Patient> => {
-    if(patientInput.name == undefined || patientInput.sex == undefined || patientInput.name == undefined || patientInput.dateOfBirth == undefined || patientInput.address == undefined)
-        throw new Error("Undefined properties when creating patient.")
-    const patient = new Patient({name: patientInput.name, sex: patientInput.sex, dateOfBirth: patientInput.dateOfBirth, age: patientInput.age, address: patientInput.address, email: patientInput.email, complaints: patientInput.complaints, nationalRegister: patientInput.nationalRegister})
-    return await patientDb.createPatient(patient);
+    if (!patientInput.name || !patientInput.sex || !patientInput.dateOfBirth || !patientInput.address) {
+        throw new Error("Undefined properties when creating patient.");
+    }
+
+    const patient = new Patient(patientInput);
+    return await patientDb.createPatient(patient.toObject());
 }
 
 const deletePatientById = async (patientId: number): Promise<Patient> => {
