@@ -1,5 +1,3 @@
-
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -19,4 +17,13 @@ model Patient {
     email             String
     complaints        String[]
     nationalRegister  String
+}
+
+model Consultation {
+    id                Int @id @default(autoincrement())
+    startDate         DateTime
+    endDate           DateTime
+    name              String
+    patient           Patient
+    doctors           Doctor[]
 }
