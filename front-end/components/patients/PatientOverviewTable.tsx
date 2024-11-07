@@ -1,5 +1,5 @@
-import React from 'react';
-import { Patient } from '@types';
+import React from 'react'; 
+import { Patient } from 'types';
 
 interface PatientOverviewTableProps {
     patients: Array<Patient>;
