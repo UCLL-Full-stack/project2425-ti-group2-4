@@ -14,7 +14,9 @@ const getDoctorById = async (id: number): Promise<Doctor | null> => {
 }
 
 const createDoctor = async (doctorInput: DoctorInput): Promise<Doctor> => {
-    return await doctorDb.createDoctor(doctorInput);
+
+    const doctor = new Doctor(doctorInput);
+    return await doctorDb.createDoctor(doctor.toObject());
 }
 
 export default {

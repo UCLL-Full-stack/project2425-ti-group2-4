@@ -1,8 +1,9 @@
-import { Specialisation } from "../../types";
+import { DoctorInput, Specialisation } from "../../types";
 import { Office } from "./office";
 import {Doctor as DoctorPrisma, Office as OfficePrisma} from '@prisma/client'
 
 export class Doctor {
+
     readonly id?: number;
     private name: string;
     private email: string;
@@ -78,6 +79,15 @@ export class Doctor {
         if (!emailRegex.test(doctor.email)) {
             throw new Error("Invalid email format.");
         }
+    }
+
+    toObject(): DoctorInput {
+        return {
+            name: this.name,
+            email: this.email,
+            specialisation: this.specialisation,
+            offices: this.offices
+        };
     }
 
     static from({

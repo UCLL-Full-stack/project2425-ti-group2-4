@@ -1,4 +1,5 @@
 import { Office as OfficePrisma} from "@prisma/client";
+import { OfficeInput } from "../../types";
 
 export class Office {
     readonly id?: number;
@@ -69,6 +70,15 @@ export class Office {
         this.phoneNumber = value;
     }
 
+    toObject(): OfficeInput {
+        return {
+            name: this.name,
+            address: this.address,
+            email: this.email,
+            openingHours: this.openingHours,
+            phoneNumber: this.phoneNumber
+        };
+    }
 
     static from({ 
         id,

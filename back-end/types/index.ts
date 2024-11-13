@@ -20,6 +20,15 @@ type DoctorInput = {
   offices: Office[];
 }
 
+type OfficeInput = {
+  id?: number
+  name: string;
+  address: string;
+  email: string;
+  openingHours: Date[];
+  phoneNumber: number;
+}
+
 type Specialisation = 
   | 'General Practitioner'
   | 'Cardiologist'
@@ -71,5 +80,6 @@ type Specialisation =
 export {
     Specialisation,
     PatientInput,
-    DoctorInput
+    DoctorInput,
+    OfficeInput
 }
