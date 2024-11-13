@@ -1,5 +1,8 @@
 import { Doctor } from "./doctor";
-import { Consultation as ConsultationPrisma } from "@prisma/client";
+import { 
+    Consultation as ConsultationPrisma, 
+    Patient as PatientPrisma,
+    Doctor as DoctorPrisma } from "@prisma/client";
 import { Patient } from "./patient";
 
 export class Consultation {
@@ -106,14 +109,14 @@ export class Consultation {
         name,
         patient,
         doctors,
-    }: ConsultationPrisma & { patient: Patient; doctors: Doctor[] }) {
+    }: ConsultationPrisma & { patient: PatientPrisma; doctors: DoctorPrisma[] }) {
         return new Consultation({
             id,
             startDate,
             endDate,
             name,
-            patient,
-            doctors
+            patient: Patient.from(patient),
+            doctors: doctors? doctors.map((doctor) => Doctor.from(doctor)): [],
         });
     }
 }

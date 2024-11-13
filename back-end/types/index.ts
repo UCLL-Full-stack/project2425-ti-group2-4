@@ -1,3 +1,5 @@
+import { Office } from "../domain/model/office";
+
 type PatientInput = {
    id?: number
    name: string;
@@ -10,7 +12,15 @@ type PatientInput = {
    nationalRegister: string;
 }
 
-type Specialization = 
+type DoctorInput = {
+  id?: number
+  name: string;
+  email: string;
+  specialisation: Specialisation;
+  offices: Office[];
+}
+
+type Specialisation = 
   | 'General Practitioner'
   | 'Cardiologist'
   | 'Dermatologist'
@@ -57,8 +67,9 @@ type Specialization =
   | 'Herbalist'
   | 'Homeopath'
 
-export { Specialization };
 
 export {
-    PatientInput
+    Specialisation,
+    PatientInput,
+    DoctorInput
 }

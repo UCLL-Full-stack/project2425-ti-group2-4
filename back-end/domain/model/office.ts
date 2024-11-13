@@ -1,6 +1,7 @@
 import { Office as OfficePrisma} from "@prisma/client";
 
 export class Office {
+    readonly id?: number;
     private name: string;
     private address: string;
     private email: string;
@@ -8,7 +9,8 @@ export class Office {
     private phoneNumber: number;
 
 
-    constructor(office: { name: string; address: string; email: string; openingHours: Date[]; phoneNumber: number }) {
+    constructor(office: { id?:  number, name: string; address: string; email: string; openingHours: Date[]; phoneNumber: number }) {
+        this.id = office.id,
         this.name = office.name;
         this.address = office.address;
         this.email = office.email;
@@ -69,6 +71,7 @@ export class Office {
 
 
     static from({ 
+        id,
         name, 
         address,
         email,
@@ -76,6 +79,7 @@ export class Office {
         phoneNumber
     }: OfficePrisma) {
         return new Office({
+        id,
         name, 
         address,
         email,
