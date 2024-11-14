@@ -13,7 +13,7 @@ const getAllOfficesFromDB = async (): Promise<Office[]> => {
     }
 }
 
-const getofficeById = async (id: number): Promise<Office | null> => {
+const getOfficeById = async (id: number): Promise<Office | null> => {
     try {
         const officePrisma = await database.office.findUnique({
             where: {
@@ -31,7 +31,7 @@ const getofficeById = async (id: number): Promise<Office | null> => {
     }
 }
 
-const createoffice = async (officeInput: OfficeInput): Promise<Office> => {
+const createOffice = async (officeInput: OfficeInput): Promise<Office> => {
     try {
         const office = new Office(officeInput)
         const officePrisma = await database.office.create({
@@ -51,6 +51,6 @@ const createoffice = async (officeInput: OfficeInput): Promise<Office> => {
 
 export default {
     getAllOfficesFromDB,
-    getofficeById,
-    createoffice
+    getOfficeById,
+    createOffice
 }

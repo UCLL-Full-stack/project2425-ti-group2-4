@@ -31,7 +31,7 @@ officeRouter.get("/", async (req: Request, res:Response, next: NextFunction) => 
 officeRouter.get("/:officeId", async (req: Request, res:Response, next: NextFunction) => {
     try {
         const officeId = req.params.officeId;
-        const office = await officeService.getofficeById(Number(officeId));
+        const office = await officeService.getOfficeById(Number(officeId));
         res.status(200).json(office);
     }
     catch (error) {
@@ -42,7 +42,7 @@ officeRouter.get("/:officeId", async (req: Request, res:Response, next: NextFunc
 officeRouter.post("/add", async (req: Request, res:Response, next: NextFunction) => { 
     try {
         const office = <OfficeInput>req.body;
-        const result = await officeService.createoffice(office);
+        const result = await officeService.createOffice(office);
         res.status(200).json(result);
     }
     catch (error) {

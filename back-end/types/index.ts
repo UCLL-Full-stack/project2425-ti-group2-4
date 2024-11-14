@@ -1,4 +1,6 @@
+import { Doctor } from "../domain/model/doctor";
 import { Office } from "../domain/model/office";
+import { Patient } from "../domain/model/patient";
 
 type PatientInput = {
    id?: number
@@ -27,6 +29,15 @@ type OfficeInput = {
   email: string;
   openingHours: Date[];
   phoneNumber: number;
+}
+
+type ConsultationInput = {
+  id?: number;
+  startDate: Date;
+  endDate: Date;
+  name: string;
+  patient: Patient;
+  doctors: Doctor[];
 }
 
 type Specialisation = 
@@ -81,5 +92,6 @@ export {
     Specialisation,
     PatientInput,
     DoctorInput,
-    OfficeInput
+    OfficeInput,
+    ConsultationInput
 }

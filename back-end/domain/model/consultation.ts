@@ -4,6 +4,7 @@ import {
     Patient as PatientPrisma,
     Doctor as DoctorPrisma } from "@prisma/client";
 import { Patient } from "./patient";
+import { ConsultationInput } from "../../types";
 
 export class Consultation {
 
@@ -100,6 +101,16 @@ export class Consultation {
         return date1.getFullYear() === date2.getFullYear() &&
                date1.getMonth() === date2.getMonth() &&
                date1.getDate() === date2.getDate();
+    }
+
+    toObject(): ConsultationInput {
+        return {
+            startDate: this.startDate,
+            endDate: this.endDate,
+            name: this.name,
+            patient: this.patient,
+            doctors: this.doctors
+        };
     }
 
     static from({

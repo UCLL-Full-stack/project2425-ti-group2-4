@@ -6,22 +6,22 @@ import { OfficeInput } from "../types";
 const getOffices = async (): Promise<Office[]> => await officeDb.getAllOfficesFromDB();
 
 
-const getofficeById = async (id: number): Promise<Office | null> => {
-    const office = officeDb.getofficeById(id);
+const getOfficeById = async (id: number): Promise<Office | null> => {
+    const office = officeDb.getOfficeById(id);
     if (!office) {
         throw new Error(`office with id: ${id} does not exist.`)
     }
     return office;
 }
 
-const createoffice = async (officeInput: OfficeInput): Promise<Office> => {
+const createOffice = async (officeInput: OfficeInput): Promise<Office> => {
 
     const office = new Office(officeInput);
-    return await officeDb.createoffice(office.toObject());
+    return await officeDb.createOffice(office.toObject());
 }
 
 export default {
     getOffices,
-    getofficeById,
-    createoffice
+    getOfficeById,
+    createOffice
 }
