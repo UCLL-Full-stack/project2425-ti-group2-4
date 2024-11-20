@@ -72,8 +72,25 @@ const createConsultation = async (consultationInput: ConsultationInput): Promise
     }
 };
 
+const deleteConsultationById = async (consultation: Consultation): Promise<Consultation> => {
+    try {
+        const deletedConsultation = await database.consultation.delete({
+            where: { id: consultation.id },
+            include: {
+                patient: true, 
+                doctors: true,
+            },
+        });
+        return Consultation.from(deletedConsultation);
+    } catch (error) {
+        console.error("Error details:", error);
+        throw new Error("Error deleting consultation.");
+    }
+};
+
 export default {
     getAllConsultationsFromDB,
     getConsultationById,
-    createConsultation
+    createConsultation,
+    deleteConsultationById
 }

@@ -48,6 +48,7 @@ const createPatient = async (patientInput: PatientInput): Promise<Patient> => {
         return Patient.from(patientPrisma)
     } catch(error){
         console.error("Error details:", error);
+
         throw new Error("Error creating new user.")
     }
 }
@@ -59,6 +60,7 @@ const deletePatientById = async (patient: Patient): Promise<Patient> => {
         });
         return Patient.from(deletedPatient);
     } catch (error) {
+        console.error("Error details:", error);
         throw new Error("Error deleting user.")
     }
 }

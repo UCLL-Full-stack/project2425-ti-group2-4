@@ -58,4 +58,15 @@ consultationRouter.post("/add", async (req: Request, res: Response, next: NextFu
     }
 });
 
+consultationRouter.delete("/delete/:consultationId", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const consultationId = req.params.consultationId;
+        const result = await consultationService.deleteConsultationById(Number(consultationId));
+        res.status(201).json(result);
+    }
+    catch (error) {
+        next(error);
+    }
+})
+
 export { consultationRouter }

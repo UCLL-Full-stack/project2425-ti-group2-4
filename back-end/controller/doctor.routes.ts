@@ -50,16 +50,16 @@ doctorRouter.post("/add", async (req: Request, res:Response, next: NextFunction)
     }
 })
 
-// doctorRouter.delete("/delete/:doctorId", async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//         const doctorId = req.params.doctorId;
-//         const result = await doctorService.deletedoctorById(Number(doctorId));
-//         res.status(201).json(result);
-//     }
-//     catch (error) {
-//         next(error);
-//     }
-// })
+doctorRouter.delete("/delete/:doctorId", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const doctorId = req.params.doctorId;
+        const result = await doctorService.deleteDoctorById(Number(doctorId));
+        res.status(201).json(result);
+    }
+    catch (error) {
+        next(error);
+    }
+})
 
 // doctorRouter.put("/update", async (req: Request, res: Response, next: NextFunction) => {
 //     try {

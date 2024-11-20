@@ -59,8 +59,21 @@ const createDoctor = async (doctorInput: DoctorInput): Promise<Doctor> => {
     }
 };
 
+const deleteDoctorById = async (doctor: Doctor): Promise<Doctor> => {
+    try {
+        const deletedDoctor = await database.doctor.delete({
+            where: { id: doctor.id},
+        });
+        return Doctor.from(deletedDoctor);
+    } catch (error) {
+        console.error("Error details:", error);
+        throw new Error("Error deleting user.")
+    }
+}
+
 export default {
     getAllDoctorsFromDB,
     getDoctorById,
-    createDoctor
+    createDoctor,
+    deleteDoctorById
 }

@@ -18,8 +18,17 @@ const createConsultation = async (consultationInput: ConsultationInput): Promise
     return await consultationDb.createConsultation(consultationInput);
 };
 
+const deleteConsultationById = async(consultationId: number): Promise<Consultation> => {
+    const consultationToDelete = await consultationDb.getConsultationById(Number(consultationId));
+    if (!consultationToDelete) {
+        throw new Error(`consultation with id: ${consultationId} does not exist.`)
+    }
+    return await consultationDb.deleteConsultationById(consultationToDelete);
+}
+
 export default {
     getConsultations,
     getConsultationById,
-    createConsultation
+    createConsultation,
+    deleteConsultationById
 }

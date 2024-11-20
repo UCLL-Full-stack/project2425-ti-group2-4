@@ -19,8 +19,18 @@ const createDoctor = async (doctorInput: DoctorInput): Promise<Doctor> => {
     return await doctorDb.createDoctor(doctor.toObject());
 }
 
+const deleteDoctorById = async (doctorId: number): Promise<Doctor> => {
+    const doctorToDelete = await doctorDb.getDoctorById(Number(doctorId));
+    if (!doctorToDelete) {
+        throw new Error(`doctor with id: ${doctorId} does not exist.`)
+    }
+    return await doctorDb.deleteDoctorById(doctorToDelete);
+    
+}
+
 export default {
     getDoctors,
     getDoctorById,
-    createDoctor
+    createDoctor,
+    deleteDoctorById
 }

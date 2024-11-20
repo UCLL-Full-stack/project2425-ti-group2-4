@@ -24,7 +24,6 @@ const createPatient = async (patientInput: PatientInput): Promise<Patient> => {
 
 const deletePatientById = async (patientId: number): Promise<Patient> => {
     const patientToDelete = await patientDb.getPatientById(Number(patientId));
-    console.log(patientToDelete);
     if (!patientToDelete) {
         throw new Error(`Patient with id: ${patientId} does not exist.`)
     }
