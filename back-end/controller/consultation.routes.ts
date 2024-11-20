@@ -39,15 +39,23 @@ consultationRouter.get("/:consultationId", async (req: Request, res:Response, ne
     }
 });
 
-consultationRouter.post("/add", async (req: Request, res:Response, next: NextFunction) => { 
+consultationRouter.post("/add", async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const consultation = <ConsultationInput>req.body;
-        const result = await consultationService.createConsultation(consultation);
+        const { startDate, endDate, name, patient, doctors } = req.body;
+
+        const consultationInput: ConsultationInput = {
+            startDate: new Date(startDate), 
+            endDate: new Date(endDate),   
+            name,
+            patientId: patient.id,
+            doctorIds: doctors.map((doctor: { id: number }) => doctor.id) 
+        };
+
+        const result = await consultationService.createConsultation(consultationInput);
         res.status(200).json(result);
-    }
-    catch (error) {
+    } catch (error) {
         next(error);
     }
-})
+});
 
 export { consultationRouter }

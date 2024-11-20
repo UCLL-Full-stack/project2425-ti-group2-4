@@ -15,10 +15,8 @@ const getConsultationById = async (id: number): Promise<Consultation | null> => 
 }
 
 const createConsultation = async (consultationInput: ConsultationInput): Promise<Consultation> => {
-
-    const consultation = new Consultation(consultationInput);
-    return await consultationDb.createConsultation(consultation.toObject());
-}
+    return await consultationDb.createConsultation(consultationInput);
+};
 
 export default {
     getConsultations,

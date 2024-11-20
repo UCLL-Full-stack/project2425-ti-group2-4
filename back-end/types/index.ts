@@ -32,13 +32,12 @@ type OfficeInput = {
 }
 
 type ConsultationInput = {
-  id?: number;
   startDate: Date;
   endDate: Date;
   name: string;
-  patient: Patient;
-  doctors: Doctor[];
-}
+  patientId: number;
+  doctorIds: number[]; 
+};
 
 type Specialisation = 
   | 'General Practitioner'

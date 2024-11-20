@@ -45,30 +45,32 @@ const getConsultationById = async (id: number): Promise<Consultation | null> => 
 
 const createConsultation = async (consultationInput: ConsultationInput): Promise<Consultation> => {
     try {
-        const { doctors = []} = consultationInput;
-        const { patient } = consultationInput;
+        const { patientId, doctorIds, startDate, endDate, name } = consultationInput;
 
-        const consultation = new Consultation(consultationInput)
         const consultationPrisma = await database.consultation.create({
             data: {
-                startDate: consultation.getStartDate(),
-                endDate: consultation.getEndDate(),
-                name: consultation.getName(),
-                patient: {connect: {id: patient.id}},
+                startDate,
+                endDate,
+                name,
+                patient: {
+                    connect: { id: patientId } 
+                },
                 doctors: {
-                    connect: doctors.map((doctor) => ({id: doctor.id}))
+                    connect: doctorIds.map((id) => ({ id })) 
                 }
             },
             include: {
                 patient: true,
-                doctors: true
+                doctors: true  
             }
-        })
-        return Consultation.from(consultationPrisma)
-    } catch(error){
-        throw new Error("Error creating new user.")
+        });
+
+        return Consultation.from(consultationPrisma);
+    } catch (error) {
+        console.error("Error creating consultation:", error);
+        throw new Error("Error creating consultation.");
     }
-}
+};
 
 export default {
     getAllConsultationsFromDB,

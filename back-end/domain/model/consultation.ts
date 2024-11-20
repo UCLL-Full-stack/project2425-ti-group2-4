@@ -103,15 +103,7 @@ export class Consultation {
                date1.getDate() === date2.getDate();
     }
 
-    toObject(): ConsultationInput {
-        return {
-            startDate: this.startDate,
-            endDate: this.endDate,
-            name: this.name,
-            patient: this.patient,
-            doctors: this.doctors
-        };
-    }
+
 
     static from({
         id,

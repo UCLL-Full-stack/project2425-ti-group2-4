@@ -47,6 +47,7 @@ const createPatient = async (patientInput: PatientInput): Promise<Patient> => {
         })
         return Patient.from(patientPrisma)
     } catch(error){
+        console.error("Error details:", error);
         throw new Error("Error creating new user.")
     }
 }
