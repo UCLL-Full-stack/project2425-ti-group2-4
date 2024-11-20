@@ -34,7 +34,7 @@ model Doctor {
   id                Int          @id @default(autoincrement())
   name              String
   email             String
-  specialization    String     
+  specialisation    String     
   offices           Office[]
   consultations     Consultation[]     
   }

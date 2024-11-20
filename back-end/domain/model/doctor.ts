@@ -1,19 +1,22 @@
-import { Specialization } from "../../types";
+import { DoctorInput, Specialisation } from "../../types";
 import { Office } from "./office";
+import {Doctor as DoctorPrisma, Office as OfficePrisma} from '@prisma/client'
 
 export class Doctor {
+
     readonly id?: number;
     private name: string;
     private email: string;
-    private specialisation: Specialization;
+    private specialisation: Specialisation;
     private offices: Office[];
 
-    constructor(doctor: { id?: number; name: string; email: string; specialisation: Specialization; offices?: Office[] }) {
+
+    constructor(doctor: { id?: number; name: string; email: string; specialisation: Specialisation; offices: Office[] }) {
         this.id = doctor.id;
         this.name = doctor.name;
         this.email = doctor.email;
         this.specialisation = doctor.specialisation;
-        this.offices = doctor.offices || [];
+        this.offices = doctor.offices;
     }
 
     getName(): string {
@@ -24,7 +27,7 @@ export class Doctor {
         return this.email;
     }
 
-    getSpecialisation(): Specialization {
+    getSpecialisation(): Specialisation {
         return this.specialisation;
     }
 
@@ -47,7 +50,7 @@ export class Doctor {
         this.email = email;
     }
 
-    setSpecialisation(specialisation: Specialization) {
+    setSpecialisation(specialisation: Specialisation) {
         this.specialisation = specialisation;
     }
 
@@ -68,7 +71,7 @@ export class Doctor {
         }
     }
 
-    validate(doctor: { id?: number; name: string; email: string; specialisation: Specialization; offices?: Office[] }) {
+    validate(doctor: { id?: number; name: string; email: string; specialisation: Specialisation; offices?: Office[] }) {
         if (doctor.name.trim().length < 3) {
             throw new Error("Doctor's name must be at least 3 characters long.");
         }
@@ -78,7 +81,28 @@ export class Doctor {
         }
     }
 
-    static from(doctorData: { id?: number; name: string; email: string; specialisation: Specialization; offices: Office[] }) {
-        return new Doctor(doctorData);
+    toObject(): DoctorInput {
+        return {
+            name: this.name,
+            email: this.email,
+            specialisation: this.specialisation,
+            offices: this.offices
+        };
+    }
+
+    static from({
+        id, 
+        name, 
+        email, 
+        specialisation, 
+        offices
+    }: DoctorPrisma & {offices?: OfficePrisma[]}) {
+        return new Doctor({
+            id,
+            name,
+            email,
+            specialisation: specialisation as Specialisation,
+            offices: offices ? offices?.map((office) => Office.from(office)) : []
+        })
     }
 }

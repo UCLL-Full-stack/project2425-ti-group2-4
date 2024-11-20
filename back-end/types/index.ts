@@ -1,3 +1,7 @@
+import { Doctor } from "../domain/model/doctor";
+import { Office } from "../domain/model/office";
+import { Patient } from "../domain/model/patient";
+
 type PatientInput = {
    id?: number
    name: string;
@@ -10,7 +14,33 @@ type PatientInput = {
    nationalRegister: string;
 }
 
-type Specialization = 
+type DoctorInput = {
+  id?: number
+  name: string;
+  email: string;
+  specialisation: Specialisation;
+  offices: Office[];
+}
+
+type OfficeInput = {
+  id?: number
+  name: string;
+  address: string;
+  email: string;
+  openingHours: Date[];
+  phoneNumber: number;
+}
+
+type ConsultationInput = {
+  id?: number;
+  startDate: Date;
+  endDate: Date;
+  name: string;
+  patient: Patient;
+  doctors: Doctor[];
+}
+
+type Specialisation = 
   | 'General Practitioner'
   | 'Cardiologist'
   | 'Dermatologist'
@@ -57,8 +87,11 @@ type Specialization =
   | 'Herbalist'
   | 'Homeopath'
 
-export { Specialization };
 
 export {
-    PatientInput
+    Specialisation,
+    PatientInput,
+    DoctorInput,
+    OfficeInput,
+    ConsultationInput
 }

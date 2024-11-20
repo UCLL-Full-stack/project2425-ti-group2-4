@@ -1,6 +1,10 @@
 import { Doctor } from "./doctor";
-import { Consultation as ConsultationPrisma } from "@prisma/client";
+import { 
+    Consultation as ConsultationPrisma, 
+    Patient as PatientPrisma,
+    Doctor as DoctorPrisma } from "@prisma/client";
 import { Patient } from "./patient";
+import { ConsultationInput } from "../../types";
 
 export class Consultation {
 
@@ -99,6 +103,16 @@ export class Consultation {
                date1.getDate() === date2.getDate();
     }
 
+    toObject(): ConsultationInput {
+        return {
+            startDate: this.startDate,
+            endDate: this.endDate,
+            name: this.name,
+            patient: this.patient,
+            doctors: this.doctors
+        };
+    }
+
     static from({
         id,
         startDate,
@@ -106,14 +120,14 @@ export class Consultation {
         name,
         patient,
         doctors,
-    }: ConsultationPrisma & { patient: Patient; doctors: Doctor[] }) {
+    }: ConsultationPrisma & { patient: PatientPrisma; doctors: DoctorPrisma[] }) {
         return new Consultation({
             id,
             startDate,
             endDate,
             name,
-            patient,
-            doctors
+            patient: Patient.from(patient),
+            doctors: doctors? doctors.map((doctor) => Doctor.from(doctor)): [],
         });
     }
 }
