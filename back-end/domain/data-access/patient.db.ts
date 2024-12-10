@@ -4,7 +4,9 @@ import { Patient } from "../model/patient";
 
 const getAllPatientsFromDB = async (): Promise<Patient[]> => {
     try{
-        const patientPrisma = await database.patient.findMany();
+        const patientPrisma = await database.patient.findMany({
+            include: {user: true}
+        });
         return patientPrisma.map((patientPrisma) => Patient.from(patientPrisma))
     } catch(error){
         console.error(error);
@@ -17,7 +19,8 @@ const getPatientById = async (id: number): Promise<Patient | null> => {
         const patientPrisma = await database.patient.findUnique({
             where: {
                 id: id
-            }
+            },
+            include: {user: true}
         });
 
         if (patientPrisma === null) {
@@ -30,9 +33,11 @@ const getPatientById = async (id: number): Promise<Patient | null> => {
     }
 }
 
-const createPatient = async (patientInput: PatientInput): Promise<Patient> => {
+const createPatient = async (patient: Patient): Promise<Patient> => {
+    const user = patient.getUser();
     try {
-        const patient = new Patient(patientInput)
+
+
         const patientPrisma = await database.patient.create({
             data: {
                 name: patient.getName(),
@@ -42,21 +47,31 @@ const createPatient = async (patientInput: PatientInput): Promise<Patient> => {
                 address: patient.getAddress(),
                 email: patient.getEmail(),
                 complaints: patient.getComplaints(),
-                nationalRegister: patient.getNationalRegister()
+                nationalRegister: patient.getNationalRegister(),
+                user: {
+                    create: {
+                        username: user.getUsername(),
+                        password: user.getPassword(),
+                        role: user.getRole()
+                    }
+                }
             },
-        })
-        return Patient.from(patientPrisma)
-    } catch(error){
-        console.error("Error details:", error);
+            include: { user: true }
+        });
 
-        throw new Error("Error creating new user.")
+        return Patient.from(patientPrisma);
+    } catch (error) {
+        console.error("Error details:", error);
+        throw new Error("Error creating new patient.");
     }
-}
+};
+
 
 const deletePatientById = async (patient: Patient): Promise<Patient> => {
     try {
         const deletedPatient = await database.patient.delete({
             where: { id: patient.id},
+            include: { user: true }
         });
         return Patient.from(deletedPatient);
     } catch (error) {

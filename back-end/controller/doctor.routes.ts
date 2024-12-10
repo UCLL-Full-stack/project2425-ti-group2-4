@@ -1,6 +1,6 @@
 import express, {NextFunction, Request, Response} from 'express';
 import doctorService from '../service/doctor.service'
-import { DoctorInput } from '../types';
+import { Doctor } from '../domain/model/doctor';
 
 const doctorRouter = express.Router();
 
@@ -41,7 +41,7 @@ doctorRouter.get("/", async (req: Request, res:Response, next: NextFunction) => 
 
 doctorRouter.post("/add", async (req: Request, res:Response, next: NextFunction) => { 
     try {
-        const doctor = <DoctorInput>req.body;
+        const doctor = <Doctor>req.body;
         const result = await doctorService.createDoctor(doctor);
         res.status(200).json(result);
     }

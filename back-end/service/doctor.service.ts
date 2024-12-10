@@ -13,10 +13,9 @@ const getDoctorById = async (id: number): Promise<Doctor | null> => {
     return doctor;
 }
 
-const createDoctor = async (doctorInput: DoctorInput): Promise<Doctor> => {
-
-    const doctor = new Doctor(doctorInput);
-    return await doctorDb.createDoctor(doctor.toObject());
+const createDoctor = async (doctor: Doctor): Promise<Doctor> => {
+    return await doctorDb.createDoctor(doctor);
+    
 }
 
 const deleteDoctorById = async (doctorId: number): Promise<Doctor> => {

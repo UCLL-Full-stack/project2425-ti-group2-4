@@ -1,6 +1,5 @@
 import { Patient } from "../domain/model/patient";
 import patientDb from "../domain/data-access/patient.db";
-import { PatientInput } from "../types";
 
 const getPatients = async (): Promise<Patient[]> => await patientDb.getAllPatientsFromDB();
 
@@ -13,13 +12,11 @@ const getPatientById = async (id: number): Promise<Patient | null> => {
     return patient;
 }
 
-const createPatient = async (patientInput: PatientInput): Promise<Patient> => {
-    if (!patientInput.name || !patientInput.sex || !patientInput.dateOfBirth || !patientInput.address) {
+const createPatient = async (patient: Patient): Promise<Patient> => {
+    if (!patient.getName() || !patient.getSex() || !patient.getDateOfBirth() || !patient.getAddress()) {
         throw new Error("Undefined properties when creating patient.");
     }
-
-    const patient = new Patient(patientInput);
-    return await patientDb.createPatient(patient.toObject());
+    return await patientDb.createPatient(patient);
 }
 
 const deletePatientById = async (patientId: number): Promise<Patient> => {

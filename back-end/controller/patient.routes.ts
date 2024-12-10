@@ -1,6 +1,6 @@
 import express, {NextFunction, Request, Response} from 'express';
 import patientService from '../service/patient.service';
-import { PatientInput } from '../types';
+import { Patient } from '../domain/model/patient';
 
 const patientRouter = express.Router();
 
@@ -39,9 +39,9 @@ patientRouter.get("/:patientId", async (req: Request, res:Response, next: NextFu
     }
 });
 
-patientRouter.post("/add", async (req: Request, res:Response, next: NextFunction) => { 
+patientRouter.post("/add", async (req: Request , res:Response, next: NextFunction) => { 
     try {
-        const patient = <PatientInput>req.body;
+        const patient = <Patient>req.body;
         const result = await patientService.createPatient(patient);
         res.status(200).json(result);
     }
