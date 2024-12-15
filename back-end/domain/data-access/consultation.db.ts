@@ -1,6 +1,7 @@
 import { ConsultationInput } from "../../types";
 import database from "../../util/databases";
 import { Consultation } from "../model/consultation";
+import userDb from "./user.db";
 
 
 const getAllConsultationsFromDB = async (): Promise<Consultation[]> => {
@@ -8,8 +9,12 @@ const getAllConsultationsFromDB = async (): Promise<Consultation[]> => {
         const consultationPrisma = await database.consultation.findMany(
             {
                 include: {
-                    patient: true,
-                    doctors: true
+                    patient:{
+                        include: {user: true}
+                    },
+                    doctors: {
+                        include: {user: true}
+                    }
                 }
             }
         );
@@ -21,6 +26,58 @@ const getAllConsultationsFromDB = async (): Promise<Consultation[]> => {
     }
 }
 
+const getMyConsultations = async (username: string): Promise<Consultation[]> => {
+    try {
+        const user = await userDb.getUserByUsername({ username });
+
+        if (!user) {
+            throw new Error(`User with username: ${username} not found.`);
+        }
+
+        let consultationsPrisma;
+
+        if (user.getRole() === "patient") {
+            consultationsPrisma = await database.consultation.findMany({
+                where: {
+                    patientId: user.getId(),
+                },
+                include: {
+                    patient: {
+                        include: { user: true },
+                    },
+                    doctors: {
+                        include: { user: true },
+                    },
+                },
+            });
+        } else if (user.getRole() === "doctor") {
+            consultationsPrisma = await database.consultation.findMany({
+                where: {
+                    doctors: {
+                        some: { userId: user.getId() }, 
+                    },
+                },
+                include: {
+                    patient: {
+                        include: { user: true },
+                    },
+                    doctors: {
+                        include: { user: true },
+                    },
+                },
+            });
+        } else {
+            throw new Error("Unauthorized role. Cannot fetch consultations.");
+        }
+        return consultationsPrisma.map((consultationPrisma) => Consultation.from(consultationPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error("Database error. Check logs for more info.");
+    }
+}
+
+
+
 const getConsultationById = async (id: number): Promise<Consultation | null> => {
     try {
         const consultationPrisma = await database.consultation.findUnique({
@@ -28,8 +85,12 @@ const getConsultationById = async (id: number): Promise<Consultation | null> => 
                 id: id
             },
             include: {
-                patient: true,
-                doctors: true
+                patient:{
+                    include: {user: true}
+                },
+                doctors: {
+                    include: {user: true}
+                }
             }
         });
 
@@ -60,8 +121,12 @@ const createConsultation = async (consultationInput: ConsultationInput): Promise
                 }
             },
             include: {
-                patient: true,
-                doctors: true  
+                patient:{
+                    include: {user: true}
+                },
+                doctors: {
+                    include: {user: true}
+                }
             }
         });
 
@@ -77,8 +142,12 @@ const deleteConsultationById = async (consultation: Consultation): Promise<Consu
         const deletedConsultation = await database.consultation.delete({
             where: { id: consultation.id },
             include: {
-                patient: true, 
-                doctors: true,
+                patient:{
+                    include: {user: true}
+                },
+                doctors: {
+                    include: {user: true}
+                }
             },
         });
         return Consultation.from(deletedConsultation);
@@ -90,6 +159,7 @@ const deleteConsultationById = async (consultation: Consultation): Promise<Consu
 
 export default {
     getAllConsultationsFromDB,
+    getMyConsultations,
     getConsultationById,
     createConsultation,
     deleteConsultationById

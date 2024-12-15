@@ -1,5 +1,5 @@
 import {User as UserPrisma} from '@prisma/client'
-import { Role } from '../../types';
+import { Role, UserInput } from '../../types';
 
 export class User {
     private id?: number;
@@ -21,6 +21,15 @@ export class User {
         this.role = user.role;
     }
 
+    toUserInput(): UserInput {
+        return {
+            id: this.id,
+            username: this.username,
+            password: this.password,
+            role: this.role,
+        };
+    }
+    
     getId(): number | undefined {
         return this.id;
     }

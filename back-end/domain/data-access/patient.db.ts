@@ -1,6 +1,7 @@
 import { PatientInput } from "../../types";
 import database from "../../util/databases";
 import { Patient } from "../model/patient";
+import userDb from "./user.db";
 
 const getAllPatientsFromDB = async (): Promise<Patient[]> => {
     try{
@@ -11,6 +12,29 @@ const getAllPatientsFromDB = async (): Promise<Patient[]> => {
     } catch(error){
         console.error(error);
         throw new Error('Database error. See server log for details.');
+    }
+}
+
+const getPatientByUsername = async (username: string): Promise<Patient[]> => {
+
+    const user = await userDb.getUserByUsername({username})
+
+    try{
+        const patientPrisma = await database.patient.findMany(
+            {
+                where: {
+                    userId: user?.getId()
+                },
+                include: {
+                    user: true
+                }
+            }
+        );
+        return patientPrisma.map((patientPrisma) => Patient.from(patientPrisma))
+    } catch(error){        
+        console.log(error)
+        throw new Error("Database error. Check logs for more info.");
+
     }
 }
 
@@ -36,7 +60,6 @@ const getPatientById = async (id: number): Promise<Patient | null> => {
 const createPatient = async (patient: Patient): Promise<Patient> => {
     const user = patient.getUser();
     try {
-
 
         const patientPrisma = await database.patient.create({
             data: {
@@ -82,6 +105,7 @@ const deletePatientById = async (patient: Patient): Promise<Patient> => {
 
 export default {
     getAllPatientsFromDB,
+    getPatientByUsername,
     getPatientById,
     createPatient,
     deletePatientById

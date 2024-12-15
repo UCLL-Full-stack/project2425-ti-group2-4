@@ -1,6 +1,7 @@
 import { DoctorInput } from "../../types";
 import database from "../../util/databases";
 import { Doctor } from "../model/doctor";
+import userDb from "./user.db";
 
 
 const getAllDoctorsFromDB = async (): Promise<Doctor[]> => {
@@ -13,6 +14,30 @@ const getAllDoctorsFromDB = async (): Promise<Doctor[]> => {
         throw new Error('Database error. See server log for details.');
     }
 }
+
+const getDoctorByUsername = async (username: string): Promise<Doctor[]> => {
+
+    const user = await userDb.getUserByUsername({username})
+
+    try{
+        const doctorPrisma = await database.doctor.findMany(
+            {
+                where: {
+                    userId: user?.getId()
+                },
+                include: {
+                    user: true
+                }
+            }
+        );
+        return doctorPrisma.map((doctorPrisma) => Doctor.from(doctorPrisma))
+    } catch(error){        
+        console.log(error)
+        throw new Error("Database error. Check logs for more info.");
+
+    }
+}
+
 
 const getDoctorById = async (id: number): Promise<Doctor | null> => {
     try {
@@ -85,6 +110,7 @@ const deleteDoctorById = async (doctor: Doctor): Promise<Doctor> => {
 
 export default {
     getAllDoctorsFromDB,
+    getDoctorByUsername,
     getDoctorById,
     createDoctor,
     deleteDoctorById

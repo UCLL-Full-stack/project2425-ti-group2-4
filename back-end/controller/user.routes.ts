@@ -1,56 +1,31 @@
 /**
  * @swagger
- *   components:
- *      User:
- *          type: object
- *          properties:
- *            id:
- *              type: number
- *              format: int64
- *            username:
- *              type: string
- *              description: User name.
- *            password:
- *              type: string
- *              description: User password.
- *            firstName:
- *              type: string
- *              description: First name.
- *            lastName:
- *              type: string
- *              description: Last name.
- *            email:
- *              type: string
- *              description: E-mail.
- *            role:
- *               $ref: '#/components/schemas/Role'
- *      UserInput:
- *          type: object
- *          properties:
- *            username:
- *              type: string
- *              description: User name.
- *            password:
- *              type: string
- *              description: User password.
- *            firstName:
- *              type: string
- *              description: First name.
- *            lastName:
- *              type: string
- *              description: Last name.
- *            email:
- *              type: string
- *              description: E-mail.
- *            role:
- *               $ref: '#/components/schemas/Role'
- *      Role:
- *          type: string
- *          enum: [student, lecturer, admin, guest]
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: number
+ *           format: int64
+ *         username:
+ *           type: string
+ *           description: The username of the user.
+ *         password:
+ *           type: string
+ *           description: The password of the user.
+ *         role:
+ *           type: Role
+ *           description: The role of the user.
  */
 import express, {NextFunction, Request, Response} from 'express';
 import userService from '../service/user.service';
-import { UserInput } from '../types/index';
+import { Role, UserInput } from '../types/index';
 
 const userRouter = express.Router();
 
@@ -86,9 +61,10 @@ const userRouter = express.Router();
  *     security:
  *       - bearerAuth: []
  */
-userRouter.get("/", async (req: Request & { auth: any }, res:Response, next: NextFunction) => {
+userRouter.get("/", async (req: Request , res:Response, next: NextFunction) => {
     try {
-        const { username, role } = req.auth;
+        const request = req as Request & { auth: { username: string; role: Role } };
+        const { username, role } = request.auth;
         const users = await userService.getAllUsers({username, role});
         res.status(200).json(users);
     }
