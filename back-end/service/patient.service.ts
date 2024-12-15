@@ -1,7 +1,8 @@
 import { Patient } from "../domain/model/patient";
 import patientDb from "../domain/data-access/patient.db";
 import { UnauthorizedError } from "express-jwt";
-import { Role } from "../types";
+import { PatientInput, Role } from "../types";
+import database from "../util/databases";
 
 
 const getAllPatients = async (): Promise<Patient[]> => await patientDb.getAllPatientsFromDB();
@@ -43,17 +44,24 @@ const getPatientById = async ({ username, role }: { username: string; role: Role
 };
 
 
-const createPatient = async (role: Role, patient: Patient): Promise<Patient> => {
+
+const createPatient = async (role: Role, patientData: PatientInput, userId: string): Promise<Patient> => {
     if (role !== 'admin') {
         throw new UnauthorizedError('credentials_required', {
-            message: 'You are not authorized to access this rescource.'
-        })
+            message: 'You are not authorized to access this resource.'
+        });
     }
-    else if (!patient.getName() || !patient.getSex() || !patient.getDateOfBirth() || !patient.getAddress()) {
+
+    if (!patientData.name || !patientData.sex || !patientData.dateOfBirth || !patientData.address) {
         throw new Error("Undefined properties when creating patient.");
     }
-    return await patientDb.createPatient(patient);
-}
+
+    const patient = await patientDb.createPatient(patientData, userId);
+
+    return patient;
+};
+
+
 
 const deletePatientById = async (role: Role, patientId: number): Promise<Patient> => {
     if (role !== 'admin') {

@@ -57,32 +57,33 @@ const getPatientById = async (id: number): Promise<Patient | null> => {
     }
 }
 
-const createPatient = async (patient: Patient): Promise<Patient> => {
-    const user = patient.getUser();
+const createPatient = async (patientData: PatientInput, userId: string): Promise<Patient> => {
     try {
-
-        const patientPrisma = await database.patient.create({
-            data: {
-                name: patient.getName(),
-                sex: patient.getSex(),
-                dateOfBirth: patient.getDateOfBirth(),
-                age: patient.getAge(),
-                address: patient.getAddress(),
-                email: patient.getEmail(),
-                complaints: patient.getComplaints(),
-                nationalRegister: patient.getNationalRegister(),
-                user: {
-                    create: {
-                        username: user.getUsername(),
-                        password: user.getPassword(),
-                        role: user.getRole()
-                    }
-                }
-            },
-            include: { user: true }
+        const existingUser = await database.user.findUnique({
+            where: { id: Number(userId) }
         });
 
-        return Patient.from(patientPrisma);
+        if (!existingUser) {
+            throw new Error('User not found');
+        }
+        const patientPrisma = await database.patient.create({
+            data: {
+                name: patientData.name,
+                sex: patientData.sex,
+                dateOfBirth: patientData.dateOfBirth,
+                age: patientData.age,
+                address: patientData.address,
+                email: patientData.email,
+                complaints: patientData.complaints,
+                nationalRegister: patientData.nationalRegister,
+                userId: existingUser.id, 
+            },
+            include: { user: true } 
+        });
+
+        const patient = Patient.from(patientPrisma);  
+        return patient; 
+
     } catch (error) {
         console.error("Error details:", error);
         throw new Error("Error creating new patient.");

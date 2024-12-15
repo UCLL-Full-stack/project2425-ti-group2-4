@@ -41,14 +41,15 @@ const getDoctorById = async ({ username, role }: { username: string; role: Role 
         throw new Error('You are not authorized to access this resource.');
 }
 
-const createDoctor = async (role: Role, doctor: Doctor): Promise<Doctor> => {
+const createDoctor = async (role: Role, doctorData: DoctorInput, userId: string): Promise<Doctor> => {
     if (role !== 'admin') {
         throw new UnauthorizedError('credentials_required', {
             message: 'You are not authorized to access this rescource.'
         })
     }
     
-    return await doctorDb.createDoctor(doctor);
+    const doctor = await doctorDb.createDoctor(doctorData, userId)
+    return doctor
     
 }
 
