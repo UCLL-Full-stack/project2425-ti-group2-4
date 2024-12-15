@@ -1,30 +1,67 @@
 import { Patient } from "../domain/model/patient";
 import patientDb from "../domain/data-access/patient.db";
-import { PatientInput } from "../types";
+import { UnauthorizedError } from "express-jwt";
+import { Role } from "../types";
 
-const getPatients = async (): Promise<Patient[]> => await patientDb.getAllPatientsFromDB();
 
+const getAllPatients = async (): Promise<Patient[]> => await patientDb.getAllPatientsFromDB();
 
-const getPatientById = async (id: number): Promise<Patient | null> => {
-    const patient = patientDb.getPatientById(id);
-    if (!patient) {
-        throw new Error(`Patient with id: ${id} does not exist.`)
+const getPatients = async ({ username, role }: { username: string; role: Role }): Promise<Patient[]> => {
+    if(role === "admin" || "doctor")
+        return await patientDb.getAllPatientsFromDB();
+    if(role === "patient")
+        return await patientDb.getPatientByUsername(username);
+    else{
+        throw new UnauthorizedError('credentials_required', {
+            message: 'You are not authorized to access this rescource.'
+        });
+    };
+};
+
+const getPatientById = async ({ username, role }: { username: string; role: Role }, id: number): Promise<Patient | null> => {
+    if (role === 'admin' || 'doctor') {
+        const patient = await patientDb.getPatientById(id);
+        if (!patient) {
+            throw new Error(`Patient with id: ${id} does not exist.`);
+        }
+        return patient;
     }
-    return patient;
-}
 
-const createPatient = async (patientInput: PatientInput): Promise<Patient> => {
-    if (!patientInput.name || !patientInput.sex || !patientInput.dateOfBirth || !patientInput.address) {
+    if (role === 'patient') {
+        const patient = await patientDb.getPatientById(id);
+        if (!patient) {
+            throw new Error(`Patient with id: ${id} does not exist.`);
+        }
+
+        if (patient.getUser().getUsername() !== username) {
+            throw new Error('You are not authorized to access this patient.');
+        }
+        return patient;
+    }
+
+    throw new Error('You are not authorized to access this resource.');
+};
+
+
+const createPatient = async (role: Role, patient: Patient): Promise<Patient> => {
+    if (role !== 'admin') {
+        throw new UnauthorizedError('credentials_required', {
+            message: 'You are not authorized to access this rescource.'
+        })
+    }
+    else if (!patient.getName() || !patient.getSex() || !patient.getDateOfBirth() || !patient.getAddress()) {
         throw new Error("Undefined properties when creating patient.");
     }
-
-    const patient = new Patient(patientInput);
-    return await patientDb.createPatient(patient.toObject());
+    return await patientDb.createPatient(patient);
 }
 
-const deletePatientById = async (patientId: number): Promise<Patient> => {
+const deletePatientById = async (role: Role, patientId: number): Promise<Patient> => {
+    if (role !== 'admin') {
+        throw new UnauthorizedError('credentials_required', {
+            message: 'You are not authorized to access this rescource.'
+        })
+    }
     const patientToDelete = await patientDb.getPatientById(Number(patientId));
-    console.log(patientToDelete);
     if (!patientToDelete) {
         throw new Error(`Patient with id: ${patientId} does not exist.`)
     }

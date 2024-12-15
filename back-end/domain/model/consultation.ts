@@ -2,7 +2,8 @@ import { Doctor } from "./doctor";
 import { 
     Consultation as ConsultationPrisma, 
     Patient as PatientPrisma,
-    Doctor as DoctorPrisma } from "@prisma/client";
+    Doctor as DoctorPrisma,
+    User as UserPrisma } from "@prisma/client";
 import { Patient } from "./patient";
 import { ConsultationInput } from "../../types";
 
@@ -112,7 +113,7 @@ export class Consultation {
         name,
         patient,
         doctors,
-    }: ConsultationPrisma & { patient: PatientPrisma; doctors: DoctorPrisma[] }) {
+    }: ConsultationPrisma & { patient: PatientPrisma & {user: UserPrisma}; doctors: (DoctorPrisma & { user: UserPrisma})[] }) {
         return new Consultation({
             id,
             startDate,

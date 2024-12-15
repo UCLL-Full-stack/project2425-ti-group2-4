@@ -1,11 +1,12 @@
 import { DoctorInput } from "../../types";
 import database from "../../util/databases";
 import { Doctor } from "../model/doctor";
+import userDb from "./user.db";
 
 
 const getAllDoctorsFromDB = async (): Promise<Doctor[]> => {
     try{
-        const doctorPrisma = await database.doctor.findMany({include: {offices: true},});
+        const doctorPrisma = await database.doctor.findMany({include: {offices: true, user: true},});
 
         return doctorPrisma.map((doctorPrisma) => Doctor.from(doctorPrisma))
     } catch(error){
@@ -14,6 +15,30 @@ const getAllDoctorsFromDB = async (): Promise<Doctor[]> => {
     }
 }
 
+const getDoctorByUsername = async (username: string): Promise<Doctor[]> => {
+
+    const user = await userDb.getUserByUsername({username})
+
+    try{
+        const doctorPrisma = await database.doctor.findMany(
+            {
+                where: {
+                    userId: user?.getId()
+                },
+                include: {
+                    user: true
+                }
+            }
+        );
+        return doctorPrisma.map((doctorPrisma) => Doctor.from(doctorPrisma))
+    } catch(error){        
+        console.log(error)
+        throw new Error("Database error. Check logs for more info.");
+
+    }
+}
+
+
 const getDoctorById = async (id: number): Promise<Doctor | null> => {
     try {
         const doctorPrisma = await database.doctor.findUnique({
@@ -21,7 +46,8 @@ const getDoctorById = async (id: number): Promise<Doctor | null> => {
                 id: id
             },
             include: {
-                offices: true
+                offices: true,
+                user: true
             }
         });
 
@@ -35,21 +61,31 @@ const getDoctorById = async (id: number): Promise<Doctor | null> => {
     }
 }
 
-const createDoctor = async (doctorInput: DoctorInput): Promise<Doctor> => {
+const createDoctor = async (doctor: Doctor): Promise<Doctor> => {
+    const user = doctor.getUser();
+    const offices = doctor.getOffices();
+
     try {
-        const { offices = [] } = doctorInput;
 
         const doctorPrisma = await database.doctor.create({
             data: {
-                name: doctorInput.name,
-                email: doctorInput.email,
-                specialisation: doctorInput.specialisation,
+                name: doctor.getName(),
+                email: doctor.getEmail(),
+                specialisation: doctor.getSpecialisation(),
                 offices: {
                     connect: offices.map((office) => ({ id: office.id })),
                 },
+                user: {
+                    create: {
+                        username: user.getUsername(),
+                        password: user.getPassword(),
+                        role: user.getRole()  
+                    }
+                }
             },
             include: {
                 offices: true,
+                user: true
             },
         });
         return Doctor.from(doctorPrisma)
@@ -59,8 +95,23 @@ const createDoctor = async (doctorInput: DoctorInput): Promise<Doctor> => {
     }
 };
 
+const deleteDoctorById = async (doctor: Doctor): Promise<Doctor> => {
+    try {
+        const deletedDoctor = await database.doctor.delete({
+            where: { id: doctor.id},
+            include: {user: true}
+        });
+        return Doctor.from(deletedDoctor);
+    } catch (error) {
+        console.error("Error details:", error);
+        throw new Error("Error deleting user.")
+    }
+}
+
 export default {
     getAllDoctorsFromDB,
+    getDoctorByUsername,
     getDoctorById,
-    createDoctor
+    createDoctor,
+    deleteDoctorById
 }

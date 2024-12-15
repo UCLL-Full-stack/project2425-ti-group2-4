@@ -1,10 +1,11 @@
-import { Patient as PatientPrisma} from "@prisma/client";
+import { Patient as PatientPrisma, User as UserPrisma} from "@prisma/client";
 import { Consultation } from "./consultation";
 import { PatientInput } from "../../types";
-
+import { User } from './user'
 export class Patient {
 
     readonly id?: number;
+    private user: User;
     private name: string;
     private sex: string;
     private dateOfBirth: Date;
@@ -14,8 +15,9 @@ export class Patient {
     private complaints: string[];
     private nationalRegister: string;
 
-    constructor (patient: {id?: number; name: string; sex: string; dateOfBirth: Date; age: number; address: string; email: string; complaints: string[]; nationalRegister: string;}) {
+    constructor (patient: {id?: number; user: User; name: string; sex: string; dateOfBirth: Date; age: number; address: string; email: string; complaints: string[]; nationalRegister: string;}) {
         this.id = patient.id;
+        this.user = patient.user;
         this.name = patient.name;
         this.sex = patient.sex;
         this.dateOfBirth = patient.dateOfBirth;
@@ -27,7 +29,7 @@ export class Patient {
     }
 
 
-    validate(patient: {id?: number; name: string; sex: string; dateOfBirth: Date; age: number; address: string; email: string; complaints: string[]; nationalRegister: string;}) {
+    validate(patient: {id?: number; user: User; name: string; sex: string; dateOfBirth: Date; age: number; address: string; email: string; complaints: string[]; nationalRegister: string;}) {
         if (patient.name.trim() == "")
             throw new Error("Patient name cannot be empty")
     }
@@ -35,6 +37,10 @@ export class Patient {
 
     getName(): string {
         return this.name;
+    }
+
+    getUser(): User {
+        return this.user;
     }
 
     getSex(): string {
@@ -69,6 +75,10 @@ export class Patient {
         this.name = name;
     }
 
+    setUser(user: User) {
+        this.user = user;
+    }
+
     setSex(sex: string){
         this.sex = sex;
     }
@@ -97,22 +107,24 @@ export class Patient {
         this.nationalRegister = nationalRegister;
     }
 
-    toObject(): PatientInput {
-        return {
-            name: this.name,
-            sex: this.sex,
-            dateOfBirth: this.dateOfBirth,
-            age: this.age,
-            address: this.address,
-            email: this.email,
-            complaints: this.complaints,
-            nationalRegister: this.nationalRegister,
-        };
-    }
+    // toObject(): PatientInput {
+    //     return {
+    //         name: this.name,
+    //         user: this.user,
+    //         sex: this.sex,
+    //         dateOfBirth: this.dateOfBirth,
+    //         age: this.age,
+    //         address: this.address,
+    //         email: this.email,
+    //         complaints: this.complaints,
+    //         nationalRegister: this.nationalRegister,
+    //     };
+    // }
 
     static from({
         id,
         name,
+        user,
         sex,
         dateOfBirth,
         age,
@@ -120,10 +132,11 @@ export class Patient {
         email,
         complaints,
         nationalRegister
-    }: PatientPrisma) {
+    }: PatientPrisma & {user: UserPrisma}) {
         return new Patient({
             id,
             name,
+            user: User.from(user),
             sex,
             dateOfBirth,
             age,

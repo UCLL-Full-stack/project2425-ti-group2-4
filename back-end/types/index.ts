@@ -1,6 +1,9 @@
+import { User } from "@prisma/client";
 import { Doctor } from "../domain/model/doctor";
 import { Office } from "../domain/model/office";
 import { Patient } from "../domain/model/patient";
+
+type Role = 'admin' | 'patient' | 'doctor';
 
 type PatientInput = {
    id?: number
@@ -12,6 +15,7 @@ type PatientInput = {
    email: string;
    complaints: string[];
    nationalRegister: string;
+   user: UserInput;
 }
 
 type DoctorInput = {
@@ -20,6 +24,7 @@ type DoctorInput = {
   email: string;
   specialisation: Specialisation;
   offices: Office[];
+  user: UserInput;
 }
 
 type OfficeInput = {
@@ -38,6 +43,19 @@ type ConsultationInput = {
   patientId: number;
   doctorIds: number[]; 
 };
+
+type UserInput = {
+  id?: number;
+  username: string;
+  password: string;
+  role: Role;
+}
+
+type AuthenticationResponse = {
+  token: string;
+  username: string;
+  role: string;
+}
 
 type Specialisation = 
   | 'General Practitioner'
@@ -88,9 +106,12 @@ type Specialisation =
 
 
 export {
+    Role,
     Specialisation,
     PatientInput,
     DoctorInput,
     OfficeInput,
-    ConsultationInput
+    ConsultationInput,
+    UserInput,
+    AuthenticationResponse
 }
