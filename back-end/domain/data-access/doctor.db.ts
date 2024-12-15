@@ -61,27 +61,27 @@ const getDoctorById = async (id: number): Promise<Doctor | null> => {
     }
 }
 
-const createDoctor = async (doctor: Doctor): Promise<Doctor> => {
-    const user = doctor.getUser();
-    const offices = doctor.getOffices();
+const createDoctor = async (doctorData: DoctorInput, userId: string): Promise<Doctor> => {
+    const offices = doctorData.offices;
 
     try {
+        const existingUser = await database.user.findUnique({
+            where: { id: Number(userId) }
+        });
 
+        if (!existingUser) {
+            throw new Error('User not found');
+        }
         const doctorPrisma = await database.doctor.create({
             data: {
-                name: doctor.getName(),
-                email: doctor.getEmail(),
-                specialisation: doctor.getSpecialisation(),
+                name: doctorData.name,
+                email: doctorData.email,
+                specialisation: doctorData.specialisation,
                 offices: {
                     connect: offices.map((office) => ({ id: office.id })),
                 },
-                user: {
-                    create: {
-                        username: user.getUsername(),
-                        password: user.getPassword(),
-                        role: user.getRole()  
-                    }
-                }
+                userId: existingUser.id,
+                
             },
             include: {
                 offices: true,

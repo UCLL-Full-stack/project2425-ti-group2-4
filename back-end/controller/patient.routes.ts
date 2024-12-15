@@ -51,7 +51,7 @@
 import express, {NextFunction, Request, Response} from 'express';
 import patientService from '../service/patient.service';
 import { Patient } from '../domain/model/patient';
-import { Role } from '../types';
+import { PatientInput, Role } from '../types';
 
 const patientRouter = express.Router();
 
@@ -125,9 +125,9 @@ patientRouter.get("/:patientId", async (req: Request, res:Response, next: NextFu
 
 /**
  * @swagger
- * /patients/add:
+ * /patients/add/{userId}:
  *   post:
- *     summary: Add a patient to the list of patients
+ *     summary: Add a patient and link it to a user
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -137,6 +137,13 @@ patientRouter.get("/:patientId", async (req: Request, res:Response, next: NextFu
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/patient'
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: ID of the user to link with
+ *         schema:
+ *           type: number
  *     responses:
  *       '201':
  *         description: The patient has been successfully added.
@@ -149,19 +156,18 @@ patientRouter.get("/:patientId", async (req: Request, res:Response, next: NextFu
  *       '500':
  *         description: Internal server error. Something went wrong on the server.
  */
-patientRouter.post("/add", async (req: Request , res:Response, next: NextFunction) => { 
+patientRouter.post("/add/:userId", async (req: Request, res: Response, next: NextFunction) => {
     try {
         const request = req as Request & { auth: { role: Role } };
+        const { userId } = req.params;
         const { role } = request.auth;
-        const patient = <Patient>req.body;
-        const result = await patientService.createPatient(role, patient);
+        const patientData: PatientInput = req.body;  
+        const result = await patientService.createPatient(role, patientData, userId);
         res.status(200).json(result);
-    }
-    catch (error) {
+    } catch (error) {
         next(error);
     }
-})
-
+});
 /**
  * @swagger
  * /patients/delete/{patientId}:

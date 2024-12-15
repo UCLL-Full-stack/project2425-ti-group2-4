@@ -1,7 +1,7 @@
 import express, {NextFunction, Request, Response} from 'express';
 import doctorService from '../service/doctor.service'
 import { Doctor } from '../domain/model/doctor';
-import { Role } from '../types';
+import { DoctorInput, Role } from '../types';
 
 const doctorRouter = express.Router();
 
@@ -77,12 +77,13 @@ doctorRouter.get("/:doctorId", async (req: Request, res:Response, next: NextFunc
  *       '500':
  *         description: Internal server error. Something went wrong on the server.
  */
-doctorRouter.post("/add", async (req: Request, res:Response, next: NextFunction) => { 
+doctorRouter.post("/add/:userId", async (req: Request, res:Response, next: NextFunction) => { 
     try {
         const request = req as Request & { auth: { role: Role } };
+        const { userId } = req.params;
         const { role } = request.auth;
-        const doctor = <Doctor>req.body;
-        const result = await doctorService.createDoctor(role, doctor);
+        const doctorData = <DoctorInput>req.body;
+        const result = await doctorService.createDoctor(role, doctorData, userId);
         res.status(200).json(result);
     }
     catch (error) {
