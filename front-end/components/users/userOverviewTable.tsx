@@ -15,19 +15,14 @@ const UserOverviewTable: React.FC = () => {
                     </thead>
                     <tbody>
                         <tr className="data-row">
-                            <td className="border px-4 py-2">joske</td>
-                            <td className="border px-4 py-2">joske123</td>
-                            <td className="border px-4 py-2">user</td>
+                            <td className="border px-4 py-2">doctor</td>
+                            <td className="border px-4 py-2">doctor123</td>
+                            <td className="border px-4 py-2">doctor</td>
                         </tr>
                         <tr className="data-row">
-                            <td className="border px-4 py-2">jefke</td>
-                            <td className="border px-4 py-2">jefke123</td>
-                            <td className="border px-4 py-2">user</td>
-                        </tr>
-                        <tr className="data-row">
-                            <td className="border px-4 py-2">guest</td>
-                            <td className="border px-4 py-2">guest123</td>
-                            <td className="border px-4 py-2">guest</td>
+                            <td className="border px-4 py-2">patient</td>
+                            <td className="border px-4 py-2">patient123</td>
+                            <td className="border px-4 py-2">patient</td>
                         </tr>
                         <tr className="data-row">
                             <td className="border px-4 py-2">admin</td>

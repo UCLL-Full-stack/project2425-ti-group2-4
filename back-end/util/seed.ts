@@ -7,7 +7,7 @@ async function main() {
   const doctorPassword = await bcrypt.hash("doctor123", 12)
   const doctorUser = await prisma.user.create({
     data: {
-      username: 'doctorjohn',
+      username: 'doctor',
       password: doctorPassword,
       role: 'doctor',
     },
@@ -16,7 +16,7 @@ async function main() {
   const patientPassword = await bcrypt.hash("patient123", 12)
   const patientUser = await prisma.user.create({
     data: {
-      username: 'patientjohn',
+      username: 'patient',
       password: patientPassword,
       role: 'patient',
     },
