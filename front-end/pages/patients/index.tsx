@@ -2,18 +2,22 @@ import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Header from '@components/general/header';
 import PatientService from '@services/PatientService';
-import PatientOverviewTable from '../../components/patients/PatientOverviewTable'; // Assuming you have a similar component for patients
+import PatientOverviewTable from '../../components/patients/PatientOverviewTable'; 
 import { Patient } from '@types';
 
 const Patients: React.FC = () => {
+    const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
     const [patients, setPatients] = useState<Patient[]>([]);
-    const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null); // Add state for selected patient
+    const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null); 
 
-    const getAllPatients = async () => {
+    useEffect(() => {
+        setLoggedInUser(JSON.parse(sessionStorage.getItem("loggedInUser") ?? '{}'))
+    }, [])
+
+    const getPatients = async () => {
         try {
             const response = await PatientService.getPatients();
             const patientsData = await response.json();
-            console.log("Fetched data:", patientsData); // Log fetched data
             setPatients(patientsData);
         } catch (error) {
             console.error("Error fetching patients:", error);
@@ -21,7 +25,7 @@ const Patients: React.FC = () => {
     };
 
     useEffect(() => {
-        getAllPatients();
+        getPatients();
     }, []);
 
     return (
@@ -31,24 +35,20 @@ const Patients: React.FC = () => {
             </Head>
             <Header />
             <main className="d-flex flex-column justify-content-center align-items-center">
-                <h1>Patients</h1>
+                <h1 className="text-center text-3xl md:text-4xl font-extrabold text-gray-800 m-6">Patients</h1>
                 <section>
-                    <h2>Patients Overview</h2>
                     {patients.length > 0 ? (
                         <PatientOverviewTable
                             patients={patients}
-                            selectPatient={setSelectedPatient} // Pass the function to select a patient
+                            selectPatient={setSelectedPatient}
                         />
                     ) : (
                         <p>Loading or no patients available...</p>
                     )}
                     {selectedPatient && (
                         <div>
-                            {/* Render additional patient details if needed */}
                             <h3>Selected Patient Details</h3>
-                            {/* Here you can render selected patient info */}
-                            <p>Name: {selectedPatient.name}</p> {/* Example field */}
-                            {/* Add more details as required */}
+                            <p>Name: {selectedPatient.name}</p> 
                         </div>
                     )}
                 </section>
