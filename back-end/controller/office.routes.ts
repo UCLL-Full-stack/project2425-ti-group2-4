@@ -9,8 +9,6 @@ const officeRouter = express.Router();
  * /offices:
  *   get:
  *     summary: Get a list of all offices.
- *     security:
- *       - bearerAuth: []
  *     responses: 
  *       '200':
  *         description: A list of offices.
@@ -27,7 +25,6 @@ const officeRouter = express.Router();
  */
 officeRouter.get("/", async (req: Request, res:Response, next: NextFunction) => {
     try {
-
         const offices = await officeService.getOffices();
         res.status(200).json(offices);
     }
