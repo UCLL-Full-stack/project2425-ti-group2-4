@@ -7,14 +7,6 @@ interface OfficeOverviewProps {
 }
 
 const OfficeOverview: React.FC<OfficeOverviewProps> = ({ offices }: OfficeOverviewProps) => {
-  const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
-  const [loggedInUserName, setLoggedInUserName] = useState<String | null>("");
-  const router = useRouter();
-
-  useEffect(() => {
-    setLoggedInUser(JSON.parse(sessionStorage.getItem("loggedInUser") ?? '{}'));
-    setLoggedInUserName(sessionStorage.getItem("loggedInUserProfileName"));
-  }, []);
 
   return (
     <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -1,27 +1,103 @@
-import database from "./databases";
-import { Patient } from "../domain/model/patient"
+import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcrypt';
+const prisma = new PrismaClient();
 
-// async function main() {
+async function main() {
 
-  
-//       await database.patient.create({
-//         data: {
-//           name: "Jefke Vermeulen",
-//           sex: "M",
-//           dateOfBirth: new Date("2000-01-01"), 
-//           age: 24,
-//           address: "Kerkstraat 1",
-//           email: "jefkevermeulen@gmail.com",
-//           complaints: { set: [] },
-//           nationalRegister: "111.11-11.11.11"
-//         },
-//       });
-//     }
-    
-//     main()
-//     .catch((e) => {
-//       throw e;
-//     })
-//     .finally(async () => {
-//       await database.$disconnect();
-//     });
+  const doctorPassword = await bcrypt.hash("doctor123", 12)
+  const doctorUser = await prisma.user.create({
+    data: {
+      username: 'doctorjohn',
+      password: doctorPassword,
+      role: 'doctor',
+    },
+  });
+
+  const patientPassword = await bcrypt.hash("patient123", 12)
+  const patientUser = await prisma.user.create({
+    data: {
+      username: 'patientjohn',
+      password: patientPassword,
+      role: 'patient',
+    },
+  });
+
+  const adminPassword = await bcrypt.hash("admin123", 12)
+  const adminUser = await prisma.user.create({
+    data: {
+      username: 'admin',
+      password: adminPassword,
+      role: 'admin',
+    },
+  });
+
+  const doctor = await prisma.doctor.create({
+    data: {
+      name: 'Dr. John Doe',
+      email: 'dr.johndoe@example.com',
+      specialisation: 'General Medicine',
+      userId: doctorUser.id,
+    },
+  });
+
+
+  const office1 = await prisma.office.create({
+    data: {
+      name: 'John Doe Clinic',
+      address: '123 Main St, Springfield, IL',
+      email: 'clinic1@example.com',
+      phoneNumber: 1234567890,
+      doctors: {
+        connect: { id: doctor.id },
+      },
+    },
+  });
+
+  const office2 = await prisma.office.create({
+    data: {
+      name: 'Jane Doe Clinic',
+      address: '100 Main St, Springfield, IL',
+      email: 'clinic2@example.com',
+      phoneNumber: 1234567891,
+      doctors: {
+        connect: { id: doctor.id },
+      },
+    },
+  });
+
+  const patient = await prisma.patient.create({
+    data: {
+      name: 'John Patient',
+      sex: 'Male',
+      dateOfBirth: new Date('1990-05-15'),
+      age: 34,
+      address: '456 Elm St, Springfield, IL',
+      email: 'johnpatient@example.com',
+      complaints: ['Headache', 'Fatigue'],
+      nationalRegister: 'XYZ123456',
+      userId: patientUser.id,
+    },
+  });
+
+  const consultation = await prisma.consultation.create({
+    data: {
+      startDate: new Date(),
+      endDate: new Date(),
+      name: 'General Check-up',
+      patientId: patient.id,
+      doctors: {
+        connect: { id: doctor.id },
+      },
+    },
+  });
+
+}
+
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

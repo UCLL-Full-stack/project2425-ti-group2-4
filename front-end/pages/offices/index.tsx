@@ -6,13 +6,8 @@ import OfficeOverviewTable from '@components/offices/officeOverview';
 import { office } from '@types';
 
 const Offices: React.FC = () => {
-    const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
     const [offices, setoffices] = useState<office[]>([]);
     const [selectedoffice, setSelectedoffice] = useState<office | null>(null); 
-
-    useEffect(() => {
-        setLoggedInUser(JSON.parse(sessionStorage.getItem("loggedInUser") ?? '{}'))
-    }, [])
 
     const getOffices = async () => {
         try {
