@@ -25,6 +25,16 @@ const getUserByUsername = async ({ username }: { username: string }): Promise<Us
     return user;
 };
 
+const getUserById = async ({ id }: { id: number }): Promise<User | null> => {
+    try {
+        const user = await userDB.getUserById({ id });
+        return user;
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        throw new Error('Error fetching user');
+    }
+};
+
 const createUser = async ({username, password, role}: UserInput): Promise<User> => {
     const existing = await userDB.getUserByUsername({username});
     if(existing){
@@ -57,4 +67,4 @@ const authenticate = async ({username, password}: UserInput): Promise<Authentica
     }
 }
 
-export default { getUserByUsername, getAllUsers, createUser, authenticate };
+export default { getUserByUsername, getAllUsers, createUser, authenticate, getUserById};

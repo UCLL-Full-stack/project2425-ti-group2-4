@@ -11,16 +11,27 @@ const getAllUsers = async (): Promise<User[]> => {
     }
 };
 
+
 const getUserById = async ({ id }: { id: number }): Promise<User | null> => {
     try {
         const userPrisma = await database.user.findUnique({
-            where: { id },
+            where: {
+                id: id, 
+            },
+            include: {
+                patient: true, 
+                doctor: true,  
+            },
         });
 
-        return userPrisma ? User.from(userPrisma) : null;
+        if (!userPrisma) {
+            return null; 
+        }
+
+        return User.from(userPrisma); 
     } catch (error) {
-        console.error(error);
-        throw new Error('Database error. See server log for details.');
+        console.error('Error fetching user:', error);
+        throw new Error('Error fetching user');
     }
 };
 
@@ -57,5 +68,5 @@ export default {
     getAllUsers,
     getUserById,
     getUserByUsername,
-    createUser
+    createUser,
 };

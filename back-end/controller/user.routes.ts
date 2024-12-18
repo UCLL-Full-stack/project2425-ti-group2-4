@@ -73,6 +73,7 @@ userRouter.get("/", async (req: Request , res:Response, next: NextFunction) => {
     }
 });
 
+
 /**
  * @swagger
  * /users/signup:
@@ -170,5 +171,18 @@ userRouter.post("/login", async (req: Request, res:Response, next: NextFunction)
         next(error);
     }
 });
+
+userRouter.get("/:userId", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userId = req.params.userId;
+        const user = await userService.getUserById({ id: Number(userId) });
+
+        res.status(200).json(user);
+    } catch (error) {
+        next(error);
+    }
+});
+
+
 
 export { userRouter };

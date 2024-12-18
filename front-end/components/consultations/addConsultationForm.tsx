@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Doctor, Patient, StatusMessage } from "../../types";
+import { Doctor, Patient, StatusMessage, User } from "../../types";
 import { useRouter } from 'next/router';
 import ConsultationService from '@services/ConsultationService';
 import PatientService from '@services/PatientService';
@@ -20,10 +20,17 @@ const AddConsultationForm: React.FC = () => {
     const [doctorsError, setDoctorsError] = useState<string | null>(null);
     const [allPatients, setAllPatients] = useState<Patient[]>([]);
     const [allDoctors, setAllDoctors] = useState<Doctor[]>([]);
+    const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+    const [loggedInUserName, setLoggedInUserName] = useState<String | null>("");
+ 
+
+    useEffect(() => {
+        setLoggedInUser(JSON.parse(sessionStorage.getItem("loggedInUser") ?? '{}'))
+        setLoggedInUserName(sessionStorage.getItem("loggedInUserProfileName"))
+    }, [])
 
     const fetchDoctorsAndPatients = async () => {
         try {
-            // Fetching and parsing the response data correctly
             const fetchedPatients: Patient[] = await PatientService.getPatients().then(res => res.json());
             const fetchedDoctors: Doctor[] = await DoctorService.getDoctors().then(res => res.json());
             setAllPatients(fetchedPatients);
@@ -81,8 +88,6 @@ const AddConsultationForm: React.FC = () => {
         if (!validate()) {
             return;
         }
-
-        // Ensure that startDate and endDate are not null
         if (startDate && endDate && patient && doctors.length > 0) {
             await ConsultationService.addConsultation(startDate, endDate, name, patient, doctors);
             router.push("/Consultations");
