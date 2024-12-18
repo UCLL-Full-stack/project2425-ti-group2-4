@@ -21,21 +21,31 @@ const OfficeOverview: React.FC<OfficeOverviewProps> = ({ offices }: OfficeOvervi
               <strong>Address:</strong> {office.address}
             </p>
             <p className="text-gray-600 mt-2">
-              <strong>Email:</strong> {office.email}
+            <strong>Email:</strong> <a href={`mailto:${office.email}`} className="text-blue-600 hover:underline">{office.email}</a>
             </p>
             <p className="text-gray-600 mt-2">
               <strong>Phone Number:</strong> {office.phoneNumber}
             </p>
-            {office.openingHours && office.openingHours.length > 0 && (
-              <div className="text-gray-600 mt-2">
-                <strong>Opening Hours:</strong>
-                <ul className="list-disc ml-6">
-                  {office.openingHours.map((openingHour, idx) => (
-                    <li key={idx}>{new Date(openingHour).toLocaleString()}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
+            <p className="text-black mt-5">
+              <strong>Opening Hours</strong>
+            </p>
+            <ul>
+              <li className='mt-2'>
+                <p>Monday: 08:00 - 17:00</p>
+              </li>
+              <li className='mt-2'>
+                <p>Tuesday: 08:00 - 17:30</p>
+              </li>
+              <li className='mt-2'>
+                <p>Wednesday: 08:00 - 13:00</p>
+              </li>
+              <li className='mt-2'>
+                <p>Thursday: 08:00 - 17:00</p>
+              </li>
+              <li className='mt-2'>
+                <p>Friday: 09:00 - 17:00</p>
+              </li>
+            </ul>
           </div>
         </div>
       ))}
