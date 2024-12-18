@@ -45,7 +45,12 @@ const Consultations: React.FC = () => {
         </Head>
         <Header />
         <main className="d-flex flex-column justify-content-center align-items-center">
-                <h1 className="text-center text-3xl md:text-4xl font-extrabold text-gray-800 m-6">My consultations</h1>
+                {loggedInUser?.role === "admin" ? (
+                    <h1 className="text-center text-3xl md:text-4xl font-extrabold text-gray-800 m-6">All consultations</h1>
+
+                ) : (
+                    <h1 className="text-center text-3xl md:text-4xl font-extrabold text-gray-800 m-6">My consultations</h1>
+                )}
                 <section>
                     {authError ? (
                         <p className='text-center text-red-600'>{authError}</p>
@@ -57,7 +62,8 @@ const Consultations: React.FC = () => {
                         <p className='text-center'>Loading or no consultations available...</p>
                     )}
                 </section>
-                <div className='flex justify-center p-10'>
+                {loggedInUser?.role === "patient" &&
+                                <div className='flex justify-center p-10'>
                     <button                 
                         className="bg-transparent border-4 border-blue-400 text-black shadow-lg font-bold py-2 px-4 rounded-lg"
                         onClick={() => {router.push("/consultations/add")}}
@@ -65,7 +71,7 @@ const Consultations: React.FC = () => {
                             Add a consultation
                     </button>
                 </div>
-
+                }
             </main>
         </>
     );

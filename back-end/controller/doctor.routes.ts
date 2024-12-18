@@ -10,8 +10,7 @@ const doctorRouter = express.Router();
  * /doctors:
  *   get:
  *     summary: Get a list of all doctors.
- *     security:
- *       - bearerAuth: []
+
  *     responses: 
  *       '200':
  *         description: A list of doctors.
@@ -28,9 +27,7 @@ const doctorRouter = express.Router();
  */
 doctorRouter.get("/", async (req: Request, res:Response, next: NextFunction) => {
     try {
-        const request = req as Request & { auth: { username: string; role: Role } };
-        const { username, role } = request.auth;
-        const doctors = await doctorService.getDoctors({username, role});
+        const doctors = await doctorService.getDoctors();
         res.status(200).json(doctors);
     }
     catch (error) {

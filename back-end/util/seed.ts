@@ -89,7 +89,7 @@ async function main() {
       email: 'clinic2@example.com',
       phoneNumber: 1234567891,
       doctors: {
-        connect: { id: doctor1.id },
+        connect: { id: doctor2.id },
       },
     },
   });

@@ -8,7 +8,7 @@ import database from "../util/databases";
 const getAllPatients = async (): Promise<Patient[]> => await patientDb.getAllPatientsFromDB();
 
 const getPatients = async ({ username, role }: { username: string; role: Role }): Promise<Patient[]> => {
-    if(role === "admin" || "doctor")
+    if(role === "admin" || role === "doctor")
         return await patientDb.getAllPatientsFromDB();
     if(role === "patient")
         return await patientDb.getPatientByUsername(username);
@@ -18,6 +18,8 @@ const getPatients = async ({ username, role }: { username: string; role: Role })
         });
     };
 };
+
+
 
 const getPatientById = async ({ username, role }: { username: string; role: Role }, id: number): Promise<Patient | null> => {
     if (role === 'admin' || 'doctor') {
@@ -77,6 +79,8 @@ const deletePatientById = async (role: Role, patientId: number): Promise<Patient
     
 }
 
+
+
 // const updatePatient = async ({name, dateOfBirth, address, email, complaints, sex}: PatientInput): Promise<Patient> => {
 //     const patient = await patientDb.getPatientById()
 // }
@@ -85,5 +89,5 @@ export default {
     getPatients,
     getPatientById,
     createPatient,
-    deletePatientById
+    deletePatientById,
 }

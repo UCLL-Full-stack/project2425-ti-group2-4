@@ -90,7 +90,7 @@ const AddConsultationForm: React.FC = () => {
         }
         if (startDate && endDate && patient && doctors.length > 0) {
             await ConsultationService.addConsultation(startDate, endDate, name, patient, doctors);
-            router.push("/Consultations");
+            router.push("/consultations");
         }
     };
 

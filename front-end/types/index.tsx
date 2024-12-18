@@ -21,7 +21,7 @@ export type Doctor = {
     name: string;
     email: string;
     specialisation: string;
-    offices: Office;
+    offices: Office[];
 }
 
 export type User = {

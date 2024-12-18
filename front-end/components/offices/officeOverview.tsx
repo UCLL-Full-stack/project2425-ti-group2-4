@@ -17,14 +17,31 @@ const OfficeOverview: React.FC<OfficeOverviewProps> = ({ offices }: OfficeOvervi
         >
           <div className="p-4">
             <h3 className="text-xl font-semibold text-gray-900">{office.name}</h3>
-            <p className="text-gray-600 mt-2"><strong>Address:</strong> {office.address}</p>
-            <p className="text-gray-600 mt-2"><strong>Email:</strong> {office.email}</p>
-            <p className="text-gray-600 mt-2"><strong>Phone Number:</strong> {office.phoneNumber}</p>
+            <p className="text-gray-600 mt-2">
+              <strong>Address:</strong> {office.address}
+            </p>
+            <p className="text-gray-600 mt-2">
+              <strong>Email:</strong> {office.email}
+            </p>
+            <p className="text-gray-600 mt-2">
+              <strong>Phone Number:</strong> {office.phoneNumber}
+            </p>
+            {office.openingHours && office.openingHours.length > 0 && (
+              <div className="text-gray-600 mt-2">
+                <strong>Opening Hours:</strong>
+                <ul className="list-disc ml-6">
+                  {office.openingHours.map((openingHour, idx) => (
+                    <li key={idx}>{new Date(openingHour).toLocaleString()}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </div>
       ))}
     </div>
   );
+  
 };
 
 export default OfficeOverview;

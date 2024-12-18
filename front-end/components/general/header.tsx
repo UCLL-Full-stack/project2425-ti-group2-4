@@ -47,6 +47,14 @@ const Header: React.FC = () => {
               Offices
             </a>
           </li>
+          <li>
+            <a
+              className="cursor-pointer hover:text-gray-200 transition duration-300"
+              onClick={() => router.push("/doctors")}
+            >
+              Our Team
+            </a>
+          </li>
           {loggedInUser ? (
             <>
               {loggedInUser.role === "admin" && (
