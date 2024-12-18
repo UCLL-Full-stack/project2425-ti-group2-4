@@ -15,12 +15,22 @@ const UserOverviewTable: React.FC = () => {
                     </thead>
                     <tbody>
                         <tr className="data-row">
-                            <td className="border px-4 py-2">doctor</td>
+                            <td className="border px-4 py-2">doctor1</td>
                             <td className="border px-4 py-2">doctor123</td>
                             <td className="border px-4 py-2">doctor</td>
                         </tr>
                         <tr className="data-row">
+                            <td className="border px-4 py-2">doctor2</td>
+                            <td className="border px-4 py-2">doctor123</td>
+                            <td className="border px-4 py-2">doctor</td>
+                        </tr>
+                        <tr className="data-row">
+                            <td className="border px-4 py-2">patient1</td>
+                            <td className="border px-4 py-2">patient123</td>
                             <td className="border px-4 py-2">patient</td>
+                        </tr>
+                        <tr className="data-row">
+                            <td className="border px-4 py-2">patient2</td>
                             <td className="border px-4 py-2">patient123</td>
                             <td className="border px-4 py-2">patient</td>
                         </tr>

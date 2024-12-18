@@ -4,7 +4,7 @@ import { User } from "types";
 
 const Header: React.FC = () => {
   const router = useRouter();
-  const [loggedInuser, setLoggedInUser] = useState<User | null>(null);
+  const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 
   useEffect(() => {
     const userData = sessionStorage.getItem("loggedInUser");
@@ -47,14 +47,24 @@ const Header: React.FC = () => {
               Offices
             </a>
           </li>
-          {loggedInuser ? (
+          {loggedInUser ? (
             <>
+              {loggedInUser.role === "admin" && (
+                <li>
+                  <a
+                    className="cursor-pointer hover:text-gray-200 transition duration-300"
+                    onClick={() => router.push("/patients")}
+                  >
+                    Patients
+                  </a>
+                </li>
+              )}
               <li>
                 <a
                   className="cursor-pointer hover:text-gray-200 transition duration-300"
-                  onClick={() => router.push("/patients")}
+                  onClick={() => router.push("/consultations")}
                 >
-                  Patients
+                  Consultations
                 </a>
               </li>
               <li>

@@ -93,16 +93,18 @@ const createPatient = async (patientData: PatientInput, userId: string): Promise
 
 const deletePatientById = async (patient: Patient): Promise<Patient> => {
     try {
+        console.log("Deleting patient with ID:", patient.id); // Debugging log
         const deletedPatient = await database.patient.delete({
-            where: { id: patient.id},
+            where: { id: patient.id },
             include: { user: true }
         });
+        console.log("Deleted patient:", deletedPatient); // Confirm successful deletion
         return Patient.from(deletedPatient);
     } catch (error) {
-        console.error("Error details:", error);
-        throw new Error("Error deleting user.")
+        console.error("Error details:", error); // Log the error for debugging
+        throw new Error("Error deleting user.");
     }
-}
+};
 
 export default {
     getAllPatientsFromDB,

@@ -4,19 +4,40 @@ const prisma = new PrismaClient();
 
 async function main() {
 
+  await prisma.user.deleteMany();
+  await prisma.doctor.deleteMany();
+  await prisma.consultation.deleteMany();
+  await prisma.office.deleteMany();
+
   const doctorPassword = await bcrypt.hash("doctor123", 12)
-  const doctorUser = await prisma.user.create({
+  const doctorUser1 = await prisma.user.create({
     data: {
-      username: 'doctor',
+      username: 'doctor1',
+      password: doctorPassword,
+      role: 'doctor',
+    },
+  });
+
+  const doctorUser2 = await prisma.user.create({
+    data: {
+      username: 'doctor2',
       password: doctorPassword,
       role: 'doctor',
     },
   });
 
   const patientPassword = await bcrypt.hash("patient123", 12)
-  const patientUser = await prisma.user.create({
+  const patientUser1 = await prisma.user.create({
     data: {
-      username: 'patient',
+      username: 'patient1',
+      password: patientPassword,
+      role: 'patient',
+    },
+  });
+
+  const patientUser2 = await prisma.user.create({
+    data: {
+      username: 'patient2',
       password: patientPassword,
       role: 'patient',
     },
@@ -31,15 +52,23 @@ async function main() {
     },
   });
 
-  const doctor = await prisma.doctor.create({
+  const doctor1 = await prisma.doctor.create({
     data: {
       name: 'Dr. John Doe',
       email: 'dr.johndoe@example.com',
       specialisation: 'General Medicine',
-      userId: doctorUser.id,
+      userId: doctorUser1.id,
     },
   });
 
+  const doctor2 = await prisma.doctor.create({
+    data: {
+      name: 'Dr. Jane Doe',
+      email: 'dr.janedoe@example.com',
+      specialisation: 'General Medicine',
+      userId: doctorUser2.id,
+    },
+  });
 
   const office1 = await prisma.office.create({
     data: {
@@ -48,7 +77,7 @@ async function main() {
       email: 'clinic1@example.com',
       phoneNumber: 1234567890,
       doctors: {
-        connect: { id: doctor.id },
+        connect: { id: doctor1.id },
       },
     },
   });
@@ -60,12 +89,12 @@ async function main() {
       email: 'clinic2@example.com',
       phoneNumber: 1234567891,
       doctors: {
-        connect: { id: doctor.id },
+        connect: { id: doctor1.id },
       },
     },
   });
 
-  const patient = await prisma.patient.create({
+  const patient1 = await prisma.patient.create({
     data: {
       name: 'John Patient',
       sex: 'Male',
@@ -75,7 +104,21 @@ async function main() {
       email: 'johnpatient@example.com',
       complaints: ['Headache', 'Fatigue'],
       nationalRegister: 'XYZ123456',
-      userId: patientUser.id,
+      userId: patientUser1.id,
+    },
+  });
+
+  const patient2 = await prisma.patient.create({
+    data: {
+      name: 'Jane Patient',
+      sex: 'Female',
+      dateOfBirth: new Date('1991-05-15'),
+      age: 33,
+      address: '455 Elm St, Springfield, IL',
+      email: 'janepatient@example.com',
+      complaints: ['Headache', 'Fatigue'],
+      nationalRegister: 'XYZ123457',
+      userId: patientUser2.id,
     },
   });
 
@@ -84,9 +127,9 @@ async function main() {
       startDate: new Date(),
       endDate: new Date(),
       name: 'General Check-up',
-      patientId: patient.id,
+      patientId: patient1.id,
       doctors: {
-        connect: { id: doctor.id },
+        connect: { id: doctor1.id },
       },
     },
   });
