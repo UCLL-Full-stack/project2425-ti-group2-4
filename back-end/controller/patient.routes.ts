@@ -210,15 +210,5 @@ patientRouter.delete("/delete/:patientId", async (req: Request, res: Response, n
     }
 })
 
-// patientRouter.put("/update", async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//         const patient= <PatientInput>req.body;
-//         const result = await patientService.updatePatient(patient);
-//         res.status(201).json(result);
-//     }
-//     catch (error) {
-//         next(error);
-//     }
-// })
 
 export {patientRouter};

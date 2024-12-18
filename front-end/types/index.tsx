@@ -16,7 +16,16 @@ export type Patient = {
     user?: User;
 }
 
+export type Doctor = {
+    id?: number;
+    name: string;
+    email: string;
+    specialisation: string;
+    offices: Office[];
+}
+
 export type User = {
+    id?: number;
     token?: string;
     username?: string;
     password?: string;
@@ -30,4 +39,13 @@ export type Office = {
     email: string;
     openingHours: Date[];
     phoneNumber: number;
+}
+
+export type Consultation = {
+    id?: number;
+    startDate: Date;
+    endDate: Date;
+    name: string;
+    patient: Patient;
+    doctors: Doctor[];
 }

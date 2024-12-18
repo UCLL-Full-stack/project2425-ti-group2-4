@@ -7,7 +7,6 @@ import { office } from '@types';
 
 const Offices: React.FC = () => {
     const [offices, setoffices] = useState<office[]>([]);
-    const [selectedoffice, setSelectedoffice] = useState<office | null>(null); 
 
     const getOffices = async () => {
         try {
@@ -37,7 +36,7 @@ const Offices: React.FC = () => {
                             offices={offices}
                         />
                     ) : (
-                        <p>Loading or no offices available...</p>
+                        <p className='text-center'>Loading or no offices available...</p>
                     )}
                 </section>
             </main>

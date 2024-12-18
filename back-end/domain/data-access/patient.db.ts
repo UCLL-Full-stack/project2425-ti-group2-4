@@ -1,4 +1,4 @@
-import { PatientInput } from "../../types";
+import { PatientInput, Role } from "../../types";
 import database from "../../util/databases";
 import { Patient } from "../model/patient";
 import userDb from "./user.db";
@@ -93,16 +93,18 @@ const createPatient = async (patientData: PatientInput, userId: string): Promise
 
 const deletePatientById = async (patient: Patient): Promise<Patient> => {
     try {
+        console.log("Deleting patient with ID:", patient.id); 
         const deletedPatient = await database.patient.delete({
-            where: { id: patient.id},
+            where: { id: patient.id },
             include: { user: true }
         });
+        console.log("Deleted patient:", deletedPatient); 
         return Patient.from(deletedPatient);
     } catch (error) {
         console.error("Error details:", error);
-        throw new Error("Error deleting user.")
+        throw new Error("Error deleting user.");
     }
-}
+};
 
 export default {
     getAllPatientsFromDB,

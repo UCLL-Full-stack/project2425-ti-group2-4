@@ -7,7 +7,7 @@ import { ConsultationInput, Role } from "../types";
 const getAllConsultations = async (): Promise<Consultation[]> => await consultationDb.getAllConsultationsFromDB();
 
 const getConsultations = async ({ username, role }: { username: string; role: Role }): Promise<Consultation[]> => {
-    if(role === "admin" || "doctor")
+    if(role === "admin" || role === "doctor")
         return await consultationDb.getAllConsultationsFromDB();
     if(role === "patient")
         return await consultationDb.getMyConsultations(username);

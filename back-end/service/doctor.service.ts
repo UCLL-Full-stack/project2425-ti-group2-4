@@ -5,19 +5,11 @@ import { Patient } from "../domain/model/patient";
 import { DoctorInput, Role } from "../types";
 
 
-const getAllDoctors = async (): Promise<Doctor[]> => await doctorDb.getAllDoctorsFromDB();
 
-const getDoctors = async ({ username, role }: { username: string; role: Role }): Promise<Doctor[]> => {
-    if(role === "admin")
-        return await doctorDb.getAllDoctorsFromDB();
-    if(role === "doctor")
-        return await doctorDb.getDoctorByUsername(username);
-    else{
-        throw new UnauthorizedError('credentials_required', {
-            message: 'You are not authorized to access this rescource.'
-        });
-    };
+const getDoctors = async (): Promise<Doctor[]> => {
+    return await doctorDb.getAllDoctorsFromDB();
 };
+
 
 const getDoctorById = async ({ username, role }: { username: string; role: Role }, id: number): Promise<Doctor | null> => {
     if (role === 'admin') {

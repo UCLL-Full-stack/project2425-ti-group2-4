@@ -18,6 +18,8 @@ const LoginForm: React.FC = () => {
     const clearErrors = () => {
         setUsernameError(null);
         setPasswordError(null);
+        setLoginError("");
+        setSuccessMessage("");
         setStatusMessages([]);
     }
 
@@ -61,6 +63,7 @@ const LoginForm: React.FC = () => {
             sessionStorage.setItem(
                 'loggedInUser',
                 JSON.stringify({
+                    id: user.id,
                     token: user.token,
                     username: user.username,
                     role: user.role,

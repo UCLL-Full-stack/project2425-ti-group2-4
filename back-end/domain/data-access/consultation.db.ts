@@ -34,12 +34,25 @@ const getMyConsultations = async (username: string): Promise<Consultation[]> => 
             throw new Error(`User with username: ${username} not found.`);
         }
 
+        console.log("User found:", user);
+
         let consultationsPrisma;
 
         if (user.getRole() === "patient") {
+            const patient = await database.patient.findUnique({
+                where: { userId: user.getId() }, 
+                include: {
+                    consultations: true, 
+                },
+            });
+
+            if (!patient) {
+                throw new Error(`Patient not found for userId: ${user.getId()}`);
+            }
+
             consultationsPrisma = await database.consultation.findMany({
                 where: {
-                    patientId: user.getId(),
+                    patientId: patient.id, 
                 },
                 include: {
                     patient: {
@@ -50,31 +63,18 @@ const getMyConsultations = async (username: string): Promise<Consultation[]> => 
                     },
                 },
             });
-        } else if (user.getRole() === "doctor") {
-            consultationsPrisma = await database.consultation.findMany({
-                where: {
-                    doctors: {
-                        some: { userId: user.getId() }, 
-                    },
-                },
-                include: {
-                    patient: {
-                        include: { user: true },
-                    },
-                    doctors: {
-                        include: { user: true },
-                    },
-                },
-            });
+            console.log("Consultations found for patient:", consultationsPrisma);
         } else {
             throw new Error("Unauthorized role. Cannot fetch consultations.");
         }
+
         return consultationsPrisma.map((consultationPrisma) => Consultation.from(consultationPrisma));
     } catch (error) {
         console.error(error);
         throw new Error("Database error. Check logs for more info.");
     }
-}
+};
+
 
 
 
