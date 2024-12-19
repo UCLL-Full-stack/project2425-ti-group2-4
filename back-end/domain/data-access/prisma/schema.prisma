@@ -39,17 +39,8 @@ model Office {
   address      String
   email        String
   phoneNumber  Int
-  openingHours OpeningHour[]
+  openingHours DateTime[]
   doctors      Doctor[]   @relation("DoctorToOffice")
-}
-
-model OpeningHour {
-  id        Int     @id @default(autoincrement())
-  day       String  
-  openTime  String 
-  closeTime String 
-  officeId  Int
-  office    Office  @relation(fields: [officeId], references: [id])
 }
 
 model Consultation {
