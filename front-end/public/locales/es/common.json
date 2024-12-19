@@ -1,0 +1,16 @@
+{
+  "app": {
+    "title": "Enlace Clínico"
+  },
+  "header": {
+    "nav": {
+      "home": "Inicio",
+      "patients": "Pacientes",
+      "consultations": "Consultas",
+      "login": "Iniciar sesión",
+      "logout": "Cerrar sesión"
+    },
+    "welcome": "Bienvenido"
+  }
+}
+  

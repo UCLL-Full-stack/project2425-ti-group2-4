@@ -1,11 +1,19 @@
-export type Patient = {
-    id?: number
+export interface Patient {
+    id: number;
     name: string;
-    sex: string;
-    dateOfBirth: Date;
     age: number;
+    sex: 'Male' | 'Female' | 'Other';
     address: string;
-    email: string;
-    complaints: string[];
-    nationalRegister: string;
+    city: string;
+    zipCode: string;
+    photoUrl?: string;
+    medicalAlerts: Array<string>;
+    consultations: Array<{
+        datetime: Date; // e.g., '2024-12-10'
+        provider: string; // e.g., 'Dr. Smith'
+    }>;
+    insurance: {
+        primary: string;
+        secondary?: string;
+    };
 }

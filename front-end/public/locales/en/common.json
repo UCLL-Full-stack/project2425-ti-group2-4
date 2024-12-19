@@ -1,0 +1,16 @@
+{
+  "app": {
+    "title": "ClinicalLink"
+  },
+  "header": {
+    "nav": {
+      "home": "Home",
+      "patients": "Patients",
+      "consultations": "Consultations",
+      "login": "Login",
+      "logout": "Logout"
+    },
+    "welcome": "Welcome"
+  }
+}
+  

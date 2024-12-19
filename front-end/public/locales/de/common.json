@@ -1,0 +1,16 @@
+{
+  "app": {
+    "title": "KlinikLink"
+  },
+  "header": {
+    "nav": {
+      "home": "Startseite",
+      "patients": "Patienten",
+      "consultations": "Konsultationen",
+      "login": "Anmelden",
+      "logout": "Abmelden"
+    },
+    "welcome": "Willkommen"
+  }
+}
+  

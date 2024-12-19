@@ -4,6 +4,7 @@ import Header from '@components/general/header';
 import PatientService from '@services/PatientService';
 import PatientOverviewTable from '../../components/patients/PatientOverviewTable'; // Assuming you have a similar component for patients
 import { Patient } from '@types';
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 const Patients: React.FC = () => {
     const [patients, setPatients] = useState<Patient[]>([]);
@@ -55,6 +56,16 @@ const Patients: React.FC = () => {
             </main>
         </>
     );
+};
+
+export const getServerSideProps = async (context: { locale: any }) => {
+    const { locale } = context;
+  
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? "en", ["common"])),
+        },
+    };
 };
 
 export default Patients;
