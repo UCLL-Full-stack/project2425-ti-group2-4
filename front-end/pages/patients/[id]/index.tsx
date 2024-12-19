@@ -7,7 +7,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import PatientService from '@services/PatientService';
 import Header from '@components/general/header';
 import { Patient } from 'types';
-import PatientDetails from '@components/patients/patientDetails';
+import PatientDetails from '@components/patients/PatientDetails';
 
 const PatientOverview: React.FC = () => {
     const [loadingError, setLoadingError] = useState("")

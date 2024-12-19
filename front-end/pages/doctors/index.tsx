@@ -4,23 +4,22 @@ import Header from '@components/general/header';
 import DoctorService from '@services/DoctorService';
 import DoctorsOverview from '@components/doctors/doctorsOverview';
 import { Doctor } from '@types';
+import useSWR from 'swr';
 
 const Doctors: React.FC = () => {
-    const [doctors, setDoctors] = useState<Doctor[]>([]);
-
-    const getDoctors = async () => {
-        try {
-            const response = await DoctorService.getDoctors();
-            const doctorsData = await response.json();
-            setDoctors(doctorsData);
-        } catch (error) {
-            console.error("Error fetching Doctors:", error);
+    const fetchDoctors = async () => {
+        const response = await DoctorService.getDoctors();
+        if (!response.ok) {
+            throw new Error('Failed to fetch doctors');
         }
+        return response.json();
     };
 
-    useEffect(() => {
-        getDoctors();
-    }, []);
+    const { data: doctors, error } = useSWR<Doctor[]>('doctors', fetchDoctors);
+
+    if (error) {
+        console.error("Error fetching Doctors:", error);
+    }
 
     return (
         <>
@@ -31,12 +30,14 @@ const Doctors: React.FC = () => {
             <main className="d-flex flex-column justify-content-center align-items-center">
                 <h1 className="text-center text-3xl md:text-4xl font-extrabold text-gray-800 m-6">Our Doctors</h1>
                 <section>
-                    {doctors.length > 0 ? (
-                        <DoctorsOverview
-                            doctors={doctors}
-                        />
+                    {doctors ? (
+                        doctors.length > 0 ? (
+                            <DoctorsOverview doctors={doctors} />
+                        ) : (
+                            <p className='text-center text-lg'>No doctors available</p>
+                        )
                     ) : (
-                        <p className='text-center'>Loading or no Doctors available...</p>
+                        <p className='text-center'>Loading...</p>
                     )}
                 </section>
             </main>
