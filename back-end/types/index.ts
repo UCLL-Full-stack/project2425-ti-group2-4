@@ -3,7 +3,7 @@ import { Doctor } from "../domain/model/doctor";
 import { Office } from "../domain/model/office";
 import { Patient } from "../domain/model/patient";
 
-type Role = 'admin' | 'patient' | 'doctor';
+type Role = 'admin' | 'patient' | 'doctor' | 'guest';
 
 type PatientInput = {
    id?: number

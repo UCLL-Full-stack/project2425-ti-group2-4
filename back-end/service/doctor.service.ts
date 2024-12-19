@@ -36,10 +36,10 @@ const getDoctorById = async ({ username, role }: { username: string; role: Role 
 const createDoctor = async (role: Role, doctorData: DoctorInput, userId: string): Promise<Doctor> => {
     if (role !== 'admin') {
         throw new UnauthorizedError('credentials_required', {
-            message: 'You are not authorized to access this rescource.'
+            message: 'You are not authorized to access this resource.'
         })
     }
-    
+
     const doctor = await doctorDb.createDoctor(doctorData, userId)
     return doctor
     
@@ -48,12 +48,12 @@ const createDoctor = async (role: Role, doctorData: DoctorInput, userId: string)
 const deleteDoctorById = async (role: Role, doctorId: number): Promise<Doctor> => {
     if (role !== 'admin') {
         throw new UnauthorizedError('credentials_required', {
-            message: 'You are not authorized to access this rescource.'
+            message: 'You are not authorized to access this resource.'
         })
     }
     const doctorToDelete = await doctorDb.getDoctorById(Number(doctorId));
     if (!doctorToDelete) {
-        throw new Error(`doctor with id: ${doctorId} does not exist.`)
+        throw new Error(`Doctor with id: ${doctorId} does not exist.`)
     }
     return await doctorDb.deleteDoctorById(doctorToDelete);
     

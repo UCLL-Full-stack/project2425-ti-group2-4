@@ -27,6 +27,7 @@ const getConsultationById = async (id: number): Promise<Consultation | null> => 
 }
 
 const createConsultation = async (consultationInput: ConsultationInput): Promise<Consultation> => {
+
     return await consultationDb.createConsultation(consultationInput);
 };
 

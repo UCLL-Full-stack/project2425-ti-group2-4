@@ -16,6 +16,7 @@ export class Patient {
     private nationalRegister: string;
 
     constructor (patient: {id?: number; user: User; name: string; sex: string; dateOfBirth: Date; age: number; address: string; email: string; complaints: string[]; nationalRegister: string;}) {
+        this.validate(patient);
         this.id = patient.id;
         this.user = patient.user;
         this.name = patient.name;
@@ -30,10 +31,13 @@ export class Patient {
 
 
     validate(patient: {id?: number; user: User; name: string; sex: string; dateOfBirth: Date; age: number; address: string; email: string; complaints: string[]; nationalRegister: string;}) {
-        if (patient.name.trim() == "")
-            throw new Error("Patient name cannot be empty")
+        if (patient.name.trim() == "" || patient.sex.trim() == "" || patient.address.trim() == "" || patient.email.trim() == "" || patient.nationalRegister.trim() == "")
+            throw new Error("Patient details cannot be empty")
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(patient.email)) {
+            throw new Error("Invalid email format.");
+        }
     }
-
 
     getName(): string {
         return this.name;

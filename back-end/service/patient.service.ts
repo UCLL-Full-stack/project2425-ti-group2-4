@@ -53,11 +53,10 @@ const createPatient = async (role: Role, patientData: PatientInput, userId: stri
             message: 'You are not authorized to access this resource.'
         });
     }
-
-    if (!patientData.name || !patientData.sex || !patientData.dateOfBirth || !patientData.address) {
-        throw new Error("Undefined properties when creating patient.");
+    if (!patientData.name) {
+        throw new Error("Patient name cannot be empty");
     }
-
+    
     const patient = await patientDb.createPatient(patientData, userId);
 
     return patient;
@@ -68,7 +67,7 @@ const createPatient = async (role: Role, patientData: PatientInput, userId: stri
 const deletePatientById = async (role: Role, patientId: number): Promise<Patient> => {
     if (role !== 'admin') {
         throw new UnauthorizedError('credentials_required', {
-            message: 'You are not authorized to access this rescource.'
+            message: 'You are not authorized to access this resource.'
         })
     }
     const patientToDelete = await patientDb.getPatientById(Number(patientId));

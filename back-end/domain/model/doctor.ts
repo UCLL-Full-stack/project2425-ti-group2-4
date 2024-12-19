@@ -14,6 +14,7 @@ export class Doctor {
 
 
     constructor(doctor: { id?: number; user: User; name: string; email: string; specialisation: Specialisation; offices: Office[] }) {
+        this.validate(doctor);
         this.id = doctor.id;
         this.user = doctor.user;
         this.name = doctor.name;
@@ -83,8 +84,8 @@ export class Doctor {
     }
 
     validate(doctor: { id?: number; user: User; name: string; email: string; specialisation: Specialisation; offices?: Office[] }) {
-        if (doctor.name.trim().length < 3) {
-            throw new Error("Doctor's name must be at least 3 characters long.");
+        if (doctor.name.trim() == "" || doctor.specialisation.trim() == "") {
+            throw new Error("doctor details cannot be empty");
         }
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(doctor.email)) {

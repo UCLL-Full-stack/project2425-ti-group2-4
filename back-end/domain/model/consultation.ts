@@ -17,6 +17,7 @@ export class Consultation {
     private doctors: Doctor[];
 
     constructor(consultation: { id?: number; startDate: Date; endDate: Date; name: string; patient: Patient; doctors: Doctor[]; }) {
+        this.validate(consultation);
         this.id = consultation.id;
         this.startDate = consultation.startDate;
         this.endDate = consultation.endDate;

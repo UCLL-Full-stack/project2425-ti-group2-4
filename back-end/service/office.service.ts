@@ -7,9 +7,9 @@ const getOffices = async (): Promise<Office[]> => await officeDb.getAllOfficesFr
 
 
 const getOfficeById = async (id: number): Promise<Office | null> => {
-    const office = officeDb.getOfficeById(id);
+    const office = await officeDb.getOfficeById(id);
     if (!office) {
-        throw new Error(`office with id: ${id} does not exist.`)
+        throw new Error(`Office with id: ${id} does not exist.`)
     }
     return office;
 }

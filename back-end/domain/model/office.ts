@@ -10,13 +10,24 @@ export class Office {
     private phoneNumber: number;
 
 
-    constructor(office: { id?:  number, name: string; address: string; email: string; openingHours: Date[]; phoneNumber: number }) {
-        this.id = office.id,
+    constructor(office: { id?: number; name: string; address: string; email: string; openingHours: Date[]; phoneNumber: number }) {
+        this.validate(office);
+        this.id = office.id;
         this.name = office.name;
         this.address = office.address;
         this.email = office.email;
         this.openingHours = office.openingHours;
         this.phoneNumber = office.phoneNumber;
+    }
+
+    validate(office: {id?:  number, name: string; address: string; email: string; openingHours: Date[]; phoneNumber: number}) {
+        if (office.name.trim() == "" || office.address.trim() == "") {
+            throw new Error("office details cannot be empty");
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(office.email)) {
+            throw new Error("Invalid email format.");
+        }
     }
 
 
@@ -45,9 +56,6 @@ export class Office {
     }
 
     setAddress(value: string) {
-        if (value.trim().length === 0) {
-            throw new Error("Address cannot be empty.");
-        }
         this.address = value;
     }
 
@@ -64,9 +72,6 @@ export class Office {
     }
 
     setPhoneNumber(value: number) {
-        if (value.toString().length < 10) {
-            throw new Error("Phone number must be at least 10 digits long.");
-        }
         this.phoneNumber = value;
     }
 
