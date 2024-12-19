@@ -1,0 +1,22 @@
+{
+    "homeScreen": {
+        "welcomeTitle": "Welcome to",
+        "welcomeText": "ClinicaLink is an all-in-one digital platform designed to streamline appointment scheduling, patient management, and medical data tracking for healthcare professionals such as doctors, chiropractors, physiotherapists, and other medical specialists.",
+        "getStarted": "Get Started",
+        "features": {
+        "schedulingTitle": "Streamlined Scheduling",
+        "schedulingText": "Simplify appointment booking and scheduling to save time and improve efficiency for your practice.",
+        "patientManagementTitle": "Patient Management",
+        "patientManagementText": "Easily manage patient records, visit histories, and communication in one unified system.",
+        "medicalDataTrackingTitle": "Medical Data Tracking",
+        "medicalDataTrackingText": "Track and access vital medical data securely to ensure seamless care for your patients.",
+        "collaborationToolsTitle": "Collaboration Tools",
+        "collaborationToolsText": "Collaborate effortlessly between providers and patients with our integrated tools.",
+        "securePlatformTitle": "Secure Platform",
+        "securePlatformText": "Your data security is our top priority with robust encryption and secure access.",
+        "forAllSpecialistsTitle": "For All Medical Specialists",
+        "forAllSpecialistsText": "Designed to cater to doctors, chiropractors, physiotherapists, and various healthcare specialists."
+        },
+        "readyToSimplify": "Ready to Simplify Your Practice?"
+    }
+}

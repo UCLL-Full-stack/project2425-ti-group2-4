@@ -1,0 +1,31 @@
+{
+    "header": {
+        "home": "Thuis",
+        "offices": "Kantores",
+        "patients": "Patiënten",
+        "ourTeam": "Ons Team",
+        "consultations": "Consultaties",
+        "login": "Log in",
+        "logout": "Log uit"
+    },
+    "homeScreen": {
+        "welcomeTitle": "Welkom bij",
+        "welcomeText": "ClinicaLink is een alles-in-één digitaal platform dat is ontworpen om afsprakenplanning, patiëntbeheer en medische datatracking te stroomlijnen voor zorgprofessionals zoals artsen, chiropractoren, fysiotherapeuten en andere medische specialisten.",
+        "getStarted": "Begin Nu",
+        "features": {
+          "schedulingTitle": "Gestroomlijnde Planning",
+          "schedulingText": "Vereenvoudig het boeken en plannen van afspraken om tijd te besparen en de efficiëntie van uw praktijk te verbeteren.",
+          "patientManagementTitle": "Patiëntbeheer",
+          "patientManagementText": "Beheer eenvoudig patiëntgegevens, bezoekgeschiedenis en communicatie in één geïntegreerd systeem.",
+          "medicalDataTrackingTitle": "Medische Gegevens Volgen",
+          "medicalDataTrackingText": "Volg en krijg veilig toegang tot belangrijke medische gegevens om naadloze zorg voor uw patiënten te waarborgen.",
+          "collaborationToolsTitle": "Samenwerkingstools",
+          "collaborationToolsText": "Werk moeiteloos samen tussen zorgverleners en patiënten met onze geïntegreerde tools.",
+          "securePlatformTitle": "Veilig Platform",
+          "securePlatformText": "De veiligheid van uw gegevens heeft onze hoogste prioriteit met robuuste encryptie en veilige toegang.",
+          "forAllSpecialistsTitle": "Voor Alle Medische Specialisten",
+          "forAllSpecialistsText": "Ontworpen om artsen, chiropractoren, fysiotherapeuten en verschillende zorgspecialisten te bedienen."
+        },
+        "readyToSimplify": "Klaar om uw Praktijk te Vereenvoudigen?"
+    }
+}
